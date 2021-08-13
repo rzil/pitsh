@@ -3,10 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		77473C5D26C3547D0048F16E /* PitchShifter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77473C5C26C3547D0048F16E /* PitchShifter.swift */; };
+		77473C5E26C3547D0048F16E /* PitchShifter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77473C5C26C3547D0048F16E /* PitchShifter.swift */; };
 		77C0D2CF26AA17A600670F6C /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2CE26AA17A600670F6C /* Tests_iOS.swift */; };
 		77C0D2DA26AA17A600670F6C /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2D926AA17A600670F6C /* Tests_macOS.swift */; };
 		77C0D2DC26AA17A600670F6C /* pitshApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2B326AA17A600670F6C /* pitshApp.swift */; };
@@ -15,6 +17,15 @@
 		77C0D2DF26AA17A600670F6C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2B426AA17A600670F6C /* ContentView.swift */; };
 		77C0D2E026AA17A600670F6C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 77C0D2B526AA17A600670F6C /* Assets.xcassets */; };
 		77C0D2E126AA17A600670F6C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 77C0D2B526AA17A600670F6C /* Assets.xcassets */; };
+		77C0D2F226AA185100670F6C /* AudioKit in Frameworks */ = {isa = PBXBuildFile; productRef = 77C0D2F126AA185100670F6C /* AudioKit */; };
+		77C0D2F626AA197A00670F6C /* KeyDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2F326AA197A00670F6C /* KeyDetector.swift */; };
+		77C0D2F726AA197A00670F6C /* KeyDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2F326AA197A00670F6C /* KeyDetector.swift */; };
+		77C0D2F826AA197A00670F6C /* NoteDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2F426AA197A00670F6C /* NoteDetector.swift */; };
+		77C0D2F926AA197A00670F6C /* NoteDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2F426AA197A00670F6C /* NoteDetector.swift */; };
+		77C0D2FA26AA197A00670F6C /* PitchDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2F526AA197A00670F6C /* PitchDetector.swift */; };
+		77C0D2FB26AA197A00670F6C /* PitchDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2F526AA197A00670F6C /* PitchDetector.swift */; };
+		77C0D2FD26AA19AD00670F6C /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2FC26AA19AD00670F6C /* Utilities.swift */; };
+		77C0D2FE26AA19AD00670F6C /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2FC26AA19AD00670F6C /* Utilities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		77473C5C26C3547D0048F16E /* PitchShifter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PitchShifter.swift; sourceTree = "<group>"; };
 		77C0D2B326AA17A600670F6C /* pitshApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pitshApp.swift; sourceTree = "<group>"; };
 		77C0D2B426AA17A600670F6C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		77C0D2B526AA17A600670F6C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -49,6 +61,10 @@
 		77C0D2D526AA17A600670F6C /* Tests macOS.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Tests macOS.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		77C0D2D926AA17A600670F6C /* Tests_macOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tests_macOS.swift; sourceTree = "<group>"; };
 		77C0D2DB26AA17A600670F6C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		77C0D2F326AA197A00670F6C /* KeyDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyDetector.swift; sourceTree = "<group>"; };
+		77C0D2F426AA197A00670F6C /* NoteDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteDetector.swift; sourceTree = "<group>"; };
+		77C0D2F526AA197A00670F6C /* PitchDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PitchDetector.swift; sourceTree = "<group>"; };
+		77C0D2FC26AA19AD00670F6C /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				77C0D2F226AA185100670F6C /* AudioKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -98,6 +115,7 @@
 		77C0D2B226AA17A600670F6C /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				77C0D2FF26AA1B6400670F6C /* processing */,
 				77C0D2B326AA17A600670F6C /* pitshApp.swift */,
 				77C0D2B426AA17A600670F6C /* ContentView.swift */,
 				77C0D2B526AA17A600670F6C /* Assets.xcassets */,
@@ -151,6 +169,18 @@
 			path = "Tests macOS";
 			sourceTree = "<group>";
 		};
+		77C0D2FF26AA1B6400670F6C /* processing */ = {
+			isa = PBXGroup;
+			children = (
+				77473C5C26C3547D0048F16E /* PitchShifter.swift */,
+				77C0D2FC26AA19AD00670F6C /* Utilities.swift */,
+				77C0D2F326AA197A00670F6C /* KeyDetector.swift */,
+				77C0D2F426AA197A00670F6C /* NoteDetector.swift */,
+				77C0D2F526AA197A00670F6C /* PitchDetector.swift */,
+			);
+			path = processing;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -167,6 +197,9 @@
 			dependencies = (
 			);
 			name = "pitsh (iOS)";
+			packageProductDependencies = (
+				77C0D2F126AA185100670F6C /* AudioKit */,
+			);
 			productName = "pitsh (iOS)";
 			productReference = 77C0D2BA26AA17A600670F6C /* pitsh.app */;
 			productType = "com.apple.product-type.application";
@@ -258,6 +291,9 @@
 				Base,
 			);
 			mainGroup = 77C0D2AD26AA17A600670F6C;
+			packageReferences = (
+				77C0D2F026AA185100670F6C /* XCRemoteSwiftPackageReference "AudioKit" */,
+			);
 			productRefGroup = 77C0D2BB26AA17A600670F6C /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -308,8 +344,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				77473C5D26C3547D0048F16E /* PitchShifter.swift in Sources */,
+				77C0D2FD26AA19AD00670F6C /* Utilities.swift in Sources */,
+				77C0D2FA26AA197A00670F6C /* PitchDetector.swift in Sources */,
 				77C0D2DE26AA17A600670F6C /* ContentView.swift in Sources */,
+				77C0D2F826AA197A00670F6C /* NoteDetector.swift in Sources */,
 				77C0D2DC26AA17A600670F6C /* pitshApp.swift in Sources */,
+				77C0D2F626AA197A00670F6C /* KeyDetector.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -317,8 +358,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				77473C5E26C3547D0048F16E /* PitchShifter.swift in Sources */,
+				77C0D2FE26AA19AD00670F6C /* Utilities.swift in Sources */,
+				77C0D2FB26AA197A00670F6C /* PitchDetector.swift in Sources */,
 				77C0D2DF26AA17A600670F6C /* ContentView.swift in Sources */,
+				77C0D2F926AA197A00670F6C /* NoteDetector.swift in Sources */,
 				77C0D2DD26AA17A600670F6C /* pitshApp.swift in Sources */,
+				77C0D2F726AA197A00670F6C /* KeyDetector.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -686,6 +732,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		77C0D2F026AA185100670F6C /* XCRemoteSwiftPackageReference "AudioKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/AudioKit/AudioKit/";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.2.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		77C0D2F126AA185100670F6C /* AudioKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 77C0D2F026AA185100670F6C /* XCRemoteSwiftPackageReference "AudioKit" */;
+			productName = AudioKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 77C0D2AE26AA17A600670F6C /* Project object */;
 }

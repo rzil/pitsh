@@ -37,7 +37,7 @@ class NoteDetect {
     }
     
     private func computeNoteEventsFromPitches(pitchTrack: [Float], envelope: [Float]) -> [NoteEvent] {
-        var events = subdivide(pitchTrack: pitchTrack)
+        let events = subdivide(pitchTrack: pitchTrack)
         for i in 0 ..< events.count {
             var avPitch:Float = 0, minPitch:Float = 1e6, maxPitch:Float = -1e6, totalPower:Float = 0
             for pos in events[i].pitchStart ..< events[i].pitchEnd {

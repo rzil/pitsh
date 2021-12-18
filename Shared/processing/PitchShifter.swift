@@ -32,7 +32,7 @@ class PitchShifter {
     
     let window: [Float]
     
-    var A: COMPLEX_SPLIT
+    var A: COMPLEX_SPLIT!
     var Areal: [Float]
     var Aimag: [Float]
     
@@ -52,7 +52,6 @@ class PitchShifter {
         
         Areal = Array(repeating: 0, count: Int(fftFrameSize))
         Aimag = Array(repeating: 0, count: Int(fftFrameSize))
-        A = COMPLEX_SPLIT(realp: &Areal, imagp: &Aimag)
         guard let fftSetup = vDSP_create_fftsetup(vDSP_Length(logBase2n), FFTRadix(FFT_RADIX2)) else { return nil }
         self.fftSetup = fftSetup
         
@@ -64,6 +63,14 @@ class PitchShifter {
 //            window[k] = -0.5 * cos(2 * .pi * Float(k) / Float(fftFrameSize)) + 0.5
 //        }
         self.window = window
+      
+      defer {
+        Areal.withUnsafeMutableBufferPointer { ArealBP in
+          Aimag.withUnsafeMutableBufferPointer { AimagBP in
+            self.A = COMPLEX_SPLIT(realp: ArealBP.baseAddress!, imagp: AimagBP.baseAddress!)
+          }
+        }
+      }
     }
     
     deinit {
@@ -83,7 +90,7 @@ class PitchShifter {
     
     func computePitchTrack(indata:[Float]) {
         var inFIFO = Array<Float>(repeating: 0, count: Int(fftFrameSize))
-        var outFIFO = Array<Float>(repeating: 0, count: Int(fftFrameSize))
+        let outFIFO = Array<Float>(repeating: 0, count: Int(fftFrameSize))
         var rover: Int = 0
         var inFifoLatency: Int
         
@@ -118,7 +125,9 @@ class PitchShifter {
                 pitchTrack[pitchTrackIndex] = ff
                 powerTrack[pitchTrackIndex] = fp
                 pitchTrackIndex += 1
-                dsp_copy(input: &inFIFO + stepSize, output: &inFIFO, length: vDSP_Length(inFifoLatency))
+              inFIFO.withUnsafeBufferPointer {
+                dsp_copy(input: $0.baseAddress! + stepSize, output: &inFIFO, length: vDSP_Length(inFifoLatency))
+              }
             }
         }
         
@@ -141,10 +150,11 @@ class PitchShifter {
         var rover: Int = 0
         var tmp: Float
         var freqPerBin, expct: Float
-        var qpd, inFifoLatency: Int
+//      var qpd: Int
+    var inFifoLatency: Int
         
         var work = Array<Float>(repeating: 0, count: Int(fftFrameSize))
-        var work2 = Array<Float>(repeating: 0, count: Int(fftFrameSize))
+//        var work2 = Array<Float>(repeating: 0, count: Int(fftFrameSize))
         var workComplex = Array<DSPComplex>(repeating: DSPComplex(real: 0, imag: 0), count: Int(fftFrameSizeOver2))
         
         let numSampsToProcess = indata.count
@@ -192,8 +202,10 @@ class PitchShifter {
                 /* do windowing and re,im preparation for fft */
                 vDSP_vmul(inFIFO, 1, window, 1, &work, 1, vDSP_Length(fftFrameSize))
                 do {
-                    let workCast = UnsafeRawPointer(work).bindMemory(to: DSPComplex.self, capacity: Int(fftFrameSizeOver2))
-                    vDSP_ctoz(workCast, 2, &A, 1, vDSP_Length(fftFrameSizeOver2))
+                  work.withUnsafeBytes {
+                    let workBP = $0.bindMemory(to: DSPComplex.self)
+                    vDSP_ctoz(workBP.baseAddress!, 2, &A, 1, vDSP_Length(fftFrameSizeOver2))
+                  }
                 }
                 
                 // vectorised version of fractional mod into range [-m/2,m/2)
@@ -291,18 +303,31 @@ class PitchShifter {
                     dsp_mod(input: sumPhase, mod: 2 * .pi, output: &sumPhase, length: vDSP_Length(fftFrameSizeOver2))
                     
                     /* get real and imag part and re-interleave */
-                    var splitComplex = DSPSplitComplex(realp: &synMagn, imagp: &sumPhase)
-                    vDSP_ztoc(&splitComplex, 1, &workComplex, 2, vDSP_Length(fftFrameSizeOver2))
-                    let workComplexCast = UnsafeRawPointer(workComplex).bindMemory(to: Float.self, capacity: Int(fftFrameSize))
-                    vDSP_rect(workComplexCast, 2, &work, 2, vDSP_Length(fftFrameSizeOver2))
+                  synMagn.withUnsafeMutableBufferPointer { synMagnBP in
+                    sumPhase.withUnsafeMutableBufferPointer { sumPhaseBP in
+                      var splitComplex = DSPSplitComplex(realp: synMagnBP.baseAddress!, imagp: sumPhaseBP.baseAddress!)
+                      vDSP_ztoc(&splitComplex, 1, &workComplex, 2, vDSP_Length(fftFrameSizeOver2))
+                      workComplex.withUnsafeBytes {
+                        let workComplexCast = $0.bindMemory(to: Float.self)
+                        vDSP_rect(workComplexCast.baseAddress!, 2, &work, 2, vDSP_Length(fftFrameSizeOver2))
+                      }
+                    }
+                  }
                 }
                 
                 /* prepare for fft */
-                vDSP_ctoz(UnsafeRawPointer(work).bindMemory(to: DSPComplex.self, capacity: Int(fftFrameSizeOver2)), 2, &A, 1, vDSP_Length(fftFrameSizeOver2))
+              work.withUnsafeBytes {
+                let workBP = $0.bindMemory(to: DSPComplex.self)
+                vDSP_ctoz(workBP.baseAddress!, 2, &A, 1, vDSP_Length(fftFrameSizeOver2))
+              }
                 
                 /* zero negative frequencies */
-                vDSP_vclr(&Areal + Int(fftFrameSizeOver2), 1, vDSP_Length(fftFrameSizeOver2))
-                vDSP_vclr(&Aimag + Int(fftFrameSizeOver2), 1, vDSP_Length(fftFrameSizeOver2))
+              Areal.withUnsafeMutableBufferPointer {
+                vDSP_vclr($0.baseAddress! + Int(fftFrameSizeOver2), 1, vDSP_Length(fftFrameSizeOver2))
+              }
+              Aimag.withUnsafeMutableBufferPointer {
+                vDSP_vclr($0.baseAddress! + Int(fftFrameSizeOver2), 1, vDSP_Length(fftFrameSizeOver2))
+              }
                 
                 /* do inverse transform */
                 vDSP_fft_zip(fftSetup, &A, 1, vDSP_Length(logBase2n), FFTDirection(FFT_INVERSE))
@@ -316,10 +341,14 @@ class PitchShifter {
                 dsp_copy(input: outputAccum, output: &outFIFO, length: vDSP_Length(stepSize))
                 
                 /* shift accumulator */
-                dsp_copy(input: &outputAccum + stepSize, output: &outputAccum, length: vDSP_Length(fftFrameSize))
+              outputAccum.withUnsafeBufferPointer {
+                dsp_copy(input: $0.baseAddress! + stepSize, output: &outputAccum, length: vDSP_Length(fftFrameSize))
+              }
                 
                 /* move input FIFO */
-                dsp_copy(input: &inFIFO + stepSize, output: &inFIFO, length: vDSP_Length(inFifoLatency))
+              inFIFO.withUnsafeBufferPointer {
+                dsp_copy(input: $0.baseAddress! + stepSize, output: &inFIFO, length: vDSP_Length(inFifoLatency))
+              }
             }
         }
         
@@ -347,8 +376,10 @@ class PitchShifter {
         // vDSP autocorrelation
         
         // convert real input to even-odd
-        
-        vDSP_ctoz(UnsafeRawPointer(audio).bindMemory(to: DSPComplex.self, capacity: Int(fftFrameSizeOver2)), 2, &A, 1, vDSP_Length(fftFrameSizeOver2))
+      audio.withUnsafeBytes {
+        let audioBP = $0.bindMemory(to: DSPComplex.self)
+        vDSP_ctoz(audioBP.baseAddress!, 2, &A, 1, vDSP_Length(fftFrameSizeOver2))
+      }
         
         // fft
         vDSP_fft_zrip(fftSetup, &A, 1, vDSP_Length(logBase2n), FFTDirection(FFT_FORWARD))
@@ -366,7 +397,10 @@ class PitchShifter {
         vDSP_fft_zrip(fftSetup, &A, 1, vDSP_Length(logBase2n), FFTDirection(FFT_INVERSE))
         
         // convert complex split to real
-        vDSP_ztoc(&A, 1, UnsafeMutableRawPointer(mutating: audio).bindMemory(to: DSPComplex.self, capacity: Int(fftFrameSizeOver2)), 2, vDSP_Length(fftFrameSizeOver2))
+      audio.withUnsafeMutableBytes {
+        let audioBP = $0.bindMemory(to: DSPComplex.self)
+        vDSP_ztoc(&A, 1, audioBP.baseAddress!, 2, vDSP_Length(fftFrameSizeOver2))
+      }
         
         // compute enhanced autocorrelation
         for i in 0 ..< Int(fftFrameSizeOver2) {

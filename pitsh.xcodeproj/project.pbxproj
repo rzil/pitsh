@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		77473C5D26C3547D0048F16E /* PitchShifter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77473C5C26C3547D0048F16E /* PitchShifter.swift */; };
 		77473C5E26C3547D0048F16E /* PitchShifter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77473C5C26C3547D0048F16E /* PitchShifter.swift */; };
+		778CEBAD276D638F00E6C53E /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778CEBAC276D638F00E6C53E /* Recorder.swift */; };
+		778CEBAE276D638F00E6C53E /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778CEBAC276D638F00E6C53E /* Recorder.swift */; };
 		77C0D2CF26AA17A600670F6C /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2CE26AA17A600670F6C /* Tests_iOS.swift */; };
 		77C0D2DA26AA17A600670F6C /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2D926AA17A600670F6C /* Tests_macOS.swift */; };
 		77C0D2DC26AA17A600670F6C /* pitshApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2B326AA17A600670F6C /* pitshApp.swift */; };
@@ -47,6 +49,7 @@
 
 /* Begin PBXFileReference section */
 		77473C5C26C3547D0048F16E /* PitchShifter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PitchShifter.swift; sourceTree = "<group>"; };
+		778CEBAC276D638F00E6C53E /* Recorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
 		77C0D2B326AA17A600670F6C /* pitshApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pitshApp.swift; sourceTree = "<group>"; };
 		77C0D2B426AA17A600670F6C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		77C0D2B526AA17A600670F6C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -117,6 +120,7 @@
 			children = (
 				77C0D2FF26AA1B6400670F6C /* processing */,
 				77C0D2B326AA17A600670F6C /* pitshApp.swift */,
+				778CEBAC276D638F00E6C53E /* Recorder.swift */,
 				77C0D2B426AA17A600670F6C /* ContentView.swift */,
 				77C0D2B526AA17A600670F6C /* Assets.xcassets */,
 			);
@@ -351,6 +355,7 @@
 				77C0D2F826AA197A00670F6C /* NoteDetector.swift in Sources */,
 				77C0D2DC26AA17A600670F6C /* pitshApp.swift in Sources */,
 				77C0D2F626AA197A00670F6C /* KeyDetector.swift in Sources */,
+				778CEBAD276D638F00E6C53E /* Recorder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -365,6 +370,7 @@
 				77C0D2F926AA197A00670F6C /* NoteDetector.swift in Sources */,
 				77C0D2DD26AA17A600670F6C /* pitshApp.swift in Sources */,
 				77C0D2F726AA197A00670F6C /* KeyDetector.swift in Sources */,
+				778CEBAE276D638F00E6C53E /* Recorder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

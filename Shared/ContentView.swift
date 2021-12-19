@@ -9,6 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
   var body: some View {
+//    let context = Current.coreData.persistentContainer().viewContext
+//    SongView().environment(\.managedObjectContext, context)
     RecorderView()
   }
 }

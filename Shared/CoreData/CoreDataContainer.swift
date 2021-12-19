@@ -8,9 +8,9 @@
 import CoreData
 import Foundation
 
-final class CoreDataContainer: NSPersistentContainer {
-  private(set) var error: Error?
-  private(set) var didLoad: Bool = false
+final class CoreDataContainer: NSPersistentContainer, ObservableObject {
+  @Published private(set) var error: Error?
+  @Published private(set) var didLoad: Bool = false
 
   init(name: String, bundle: Bundle = .main, inMemory: Bool = false) {
     guard let mom = NSManagedObjectModel.mergedModel(from: [bundle]) else {
@@ -38,6 +38,7 @@ final class CoreDataContainer: NSPersistentContainer {
       guard let self = self else { return }
       self.error = error
       self.didLoad = true
+      print("*** loaded persistent stores")
     }
   }
 }

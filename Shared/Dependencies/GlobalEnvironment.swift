@@ -1,5 +1,5 @@
 //
-//  Environment.swift
+//  GlobalEnvironment.swift
 //  pitsh
 //
 //  Created by Ruben Zilibowitz on 19/12/21.
@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct Environment {
+struct GlobalEnvironment {
   var coreData = CoreData()
 }
 
-var Current = Environment()
+var Current = GlobalEnvironment()

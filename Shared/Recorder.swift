@@ -3,9 +3,20 @@ import AudioKitEX
 import SwiftUI
 import AVFoundation
 
-struct RecorderData {
-  var isRecording = false
-  var isPlaying = false
+enum RecorderState {
+  case recording
+  case playing
+  case stopped
+  init() {
+    self = .stopped
+  }
+  var string: String {
+    switch self {
+    case .recording: return "Recording"
+    case .playing: return "Playing"
+    case .stopped: return "Stopped"
+    }
+  }
 }
 
 class RecorderConductor: ObservableObject {
@@ -14,12 +25,13 @@ class RecorderConductor: ObservableObject {
   let player = AudioPlayer()
   var silencer: Fader?
   let mixer = Mixer()
-  
-  @Published var data = RecorderData() {
+
+  @Published var state = RecorderState() {
     didSet {
+      guard oldValue != state else { return }
       do {
         let document = try Current.coreData.getDocument()
-        if data.isRecording {
+        if state == .recording {
           NodeRecorder.removeTempFiles()
           try recorder?.record()
         } else if let recorder = self.recorder {
@@ -37,6 +49,7 @@ class RecorderConductor: ObservableObject {
                 do {
                   try document.performAutocorrelation { error in
                     print("*** done tuning: \(error?.localizedDescription ?? "no errors")")
+                    print("*** event count \(document.eventsSorted?.count ?? -1)")
                   }
                 } catch {
                   print(error)
@@ -45,15 +58,16 @@ class RecorderConductor: ObservableObject {
             }
           }
         }
-        
-        if data.isPlaying {
-          if let sourceURL = document.audioFileURL,
-             let destinationURL = document.shiftedAudioFileURL {
-            print("*** shifting...")
-            try shiftAudioURL(sourceURL, outputURL: destinationURL)
-            print("*** done shifting")
-            try player.file = AVAudioFile(forReading: destinationURL)
+
+        if state == .playing {
+          if let sourceURL = document.audioFileURL {
+            try player.file = AVAudioFile(forReading: sourceURL)
             player.play()
+            player.completionHandler = {
+              DispatchQueue.main.async {
+                self.state = .stopped
+              }
+            }
           }
         } else {
           player.stop()
@@ -63,7 +77,7 @@ class RecorderConductor: ObservableObject {
       }
     }
   }
-  
+
   init() {
     guard let input = engine.input else {
       fatalError()
@@ -96,22 +110,39 @@ class RecorderConductor: ObservableObject {
 
 struct RecorderView: View {
   @StateObject var conductor = RecorderConductor()
-  
+
   var body: some View {
     VStack {
       Spacer()
-      Text(conductor.data.isRecording ? "STOP RECORDING" : "RECORD").onTapGesture {
-        self.conductor.data.isRecording.toggle()
-      }
+      Text(conductor.state.string)
       Spacer()
-      Text(conductor.data.isPlaying ? "STOP" : "PLAY").onTapGesture {
-        self.conductor.data.isPlaying.toggle()
-      }
+      Text("Record")
+        .bold()
+        .disabled(conductor.state != .stopped)
+        .foregroundColor(conductor.state != .stopped ? .gray : .black)
+        .onTapGesture {
+          self.conductor.state = .recording
+        }
+      Spacer()
+      Text("Play")
+        .bold()
+        .disabled(conductor.state != .stopped)
+        .foregroundColor(conductor.state != .stopped ? .gray : .black)
+        .onTapGesture {
+          self.conductor.state = .playing
+        }
+      Spacer()
+      Text("Stop")
+        .bold()
+        .disabled(conductor.state == .stopped)
+        .foregroundColor(conductor.state == .stopped ? .gray : .black)
+        .onTapGesture {
+          self.conductor.state = .stopped
+        }
       Spacer()
     }
-    
+
     .padding()
-//    .navigationBarTitle(Text("Recorder"))
     .onAppear {
       self.conductor.start()
     }

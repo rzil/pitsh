@@ -30,7 +30,7 @@ struct CoreData {
           throw NSError(domain: "Failed to create document", code: 1, userInfo: nil)
         }
         aDocument.title = "Pitsh Song"
-        aDocument.setupAudioFile()
+        aDocument.setupAudioFiles()
         if moc.hasChanges {
           try moc.save()
         }

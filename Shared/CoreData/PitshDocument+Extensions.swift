@@ -27,7 +27,17 @@ extension PitshDocument {
       }
     }
   }
-  
+
+  var audioFileURL: URL? {
+    guard let audioFile = self.audioFile else { return nil }
+    return URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(audioFile).appendingPathExtension("aiff")
+  }
+
+  var shiftedAudioFileURL: URL? {
+    guard let shiftedAudioFile = self.shiftedAudioFile else { return nil }
+    return URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(shiftedAudioFile).appendingPathExtension("aiff")
+  }
+
   func saveSelectedTool(_ tool: Tool) {
     guard let moc = managedObjectContext else { return }
     moc.perform {[unowned self] in
@@ -71,7 +81,7 @@ extension PitshDocument {
     }
   }
   
-  func setupAudioFile() {
+  func setupAudioFiles() {
     self.audioFile = UUID().uuidString
     self.shiftedAudioFile = UUID().uuidString
   }

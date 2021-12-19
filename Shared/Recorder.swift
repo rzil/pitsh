@@ -17,28 +17,39 @@ class RecorderConductor: ObservableObject {
   
   @Published var data = RecorderData() {
     didSet {
-      if data.isRecording {
-        NodeRecorder.removeTempFiles()
-        do {
+      do {
+        let document = try Current.coreData.getDocument()
+        if data.isRecording {
+          NodeRecorder.removeTempFiles()
           try recorder?.record()
-        } catch let err {
-          print(err)
+        } else if let recorder = self.recorder {
+          if recorder.isRecording == true {
+            recorder.stop()
+            if let url = recorder.audioFile?.url,
+               let destinationURL = document.audioFileURL {
+              let fileManager = FileManager.default
+              if fileManager.fileExists(atPath: destinationURL.path) {
+                try FileManager.default.removeItem(at: destinationURL)
+              }
+              try FileManager.default.moveItem(at: url, to: destinationURL)
+            }
+          }
         }
-      } else {
-        recorder?.stop()
-      }
-      
-      if data.isPlaying {
-        if let file = recorder?.audioFile {
-          let outputURL = URL(string: NSTemporaryDirectory())!.appendingPathComponent("shifted.aiff")
-          print("** shifting...")
-          try! shiftAudioURL(file.url, outputURL: outputURL)
-          print("** done shifting")
-          try! player.file = AVAudioFile(forReading: outputURL)
-          player.play()
+        
+        if data.isPlaying {
+          if let sourceURL = document.audioFileURL,
+             let destinationURL = document.shiftedAudioFileURL {
+            print("** shifting...")
+            try shiftAudioURL(sourceURL, outputURL: destinationURL)
+            print("** done shifting")
+            try player.file = AVAudioFile(forReading: destinationURL)
+            player.play()
+          }
+        } else {
+          player.stop()
         }
-      } else {
-        player.stop()
+      } catch {
+        print(error)
       }
     }
   }

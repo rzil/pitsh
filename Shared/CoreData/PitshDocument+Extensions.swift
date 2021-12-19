@@ -294,11 +294,6 @@ extension PitshDocument {
       var errorDescription: String? { return message }
     }
     
-    guard let moc = self.managedObjectContext else {
-      completionHandler(AutocorError("No managed object context"))
-      return
-    }
-    
     print("sampleRate \(sampleRate)")
     guard let pitchShifter = PitchShifter(sampleRate: Float(sampleRate)) else { completionHandler(AutocorError("Pitch shifter is nil")); return }
     pitchShifter.computePitchTrack(indata: floatData)
@@ -328,6 +323,11 @@ extension PitshDocument {
     let bestKey = keys.first ?? (root: 0, major: true, score: 0)
     print(bestKey)
     
+    guard let moc = self.managedObjectContext else {
+      completionHandler(AutocorError("No managed object context"))
+      return
+    }
+
     moc.perform {[weak self] in
       guard let self = self else {
         completionHandler(AutocorError("No self"))

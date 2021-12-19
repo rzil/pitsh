@@ -32,6 +32,16 @@ class RecorderConductor: ObservableObject {
                 try FileManager.default.removeItem(at: destinationURL)
               }
               try FileManager.default.moveItem(at: url, to: destinationURL)
+              print("*** tuning")
+              DispatchQueue.global().async {
+                do {
+                  try document.performAutocorrelation { error in
+                    print("*** done tuning: \(error?.localizedDescription ?? "no errors")")
+                  }
+                } catch {
+                  print(error)
+                }
+              }
             }
           }
         }
@@ -39,9 +49,9 @@ class RecorderConductor: ObservableObject {
         if data.isPlaying {
           if let sourceURL = document.audioFileURL,
              let destinationURL = document.shiftedAudioFileURL {
-            print("** shifting...")
+            print("*** shifting...")
             try shiftAudioURL(sourceURL, outputURL: destinationURL)
-            print("** done shifting")
+            print("*** done shifting")
             try player.file = AVAudioFile(forReading: destinationURL)
             player.play()
           }

@@ -81,7 +81,7 @@ extension PitshEvent {
    }
    }
    catch {
-   print(error.localizedDescription)
+   print(error)
    }
    }
    })

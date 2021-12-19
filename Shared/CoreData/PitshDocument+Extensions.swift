@@ -10,6 +10,12 @@ import Foundation
 import CoreData
 import CoreGraphics
 
+private func getDocumentsDirectory() -> URL {
+  let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+  let documentsDirectory = paths[0]
+  return documentsDirectory
+}
+
 extension PitshDocument {
   
   enum Tool: Int16 {
@@ -30,12 +36,12 @@ extension PitshDocument {
 
   var audioFileURL: URL? {
     guard let audioFile = self.audioFile else { return nil }
-    return URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(audioFile).appendingPathExtension("aiff")
+    return getDocumentsDirectory().appendingPathComponent(audioFile).appendingPathExtension("aiff")
   }
 
   var shiftedAudioFileURL: URL? {
     guard let shiftedAudioFile = self.shiftedAudioFile else { return nil }
-    return URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent(shiftedAudioFile).appendingPathExtension("aiff")
+    return getDocumentsDirectory().appendingPathComponent(shiftedAudioFile).appendingPathExtension("aiff")
   }
 
   func saveSelectedTool(_ tool: Tool) {
@@ -118,7 +124,7 @@ extension PitshDocument {
         }
       }
       catch {
-        print(error.localizedDescription)
+        print(error)
       }
     }
   }
@@ -163,7 +169,7 @@ extension PitshDocument {
         }
       }
       catch {
-        print(error.localizedDescription)
+        print(error)
       }
     }
   }
@@ -240,7 +246,7 @@ extension PitshDocument {
         }
       }
       catch {
-        print(error.localizedDescription)
+        print(error)
       }
     }
   }
@@ -295,7 +301,7 @@ extension PitshDocument {
     return Float((horizontal / containerWidth) * CGFloat(self.pitches?.count ?? 0))
   }
   
-  func performAutocorrelation(floatData: [Float], sampleRate: Double, completionHandler: @escaping (Error?) -> ()) {
+  func performAutocorrelation(completionHandler: @escaping (Error?) -> ()) throws {
     class AutocorError: LocalizedError {
       private let message: String
       init(_ message: String) {
@@ -304,7 +310,11 @@ extension PitshDocument {
       var errorDescription: String? { return message }
     }
     
-    print("sampleRate \(sampleRate)")
+    guard let (floatData, sampleRate) = try audioFileURL?.readAudioFile() else {
+      completionHandler(AutocorError("Audio file url is nil"))
+      return
+    }
+
     guard let pitchShifter = PitchShifter(sampleRate: Float(sampleRate)) else { completionHandler(AutocorError("Pitch shifter is nil")); return }
     pitchShifter.computePitchTrack(indata: floatData)
     guard let frequencies = pitchShifter.pitchTrack, let powers = pitchShifter.powerTrack else { completionHandler(AutocorError("No pitch or power")); return }

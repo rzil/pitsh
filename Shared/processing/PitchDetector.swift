@@ -28,12 +28,12 @@ class PitchDetector {
   var lowAFrequency: Float
   
   init?(audioStride: UInt32 = pitchAudioStride,
-       dominantFrequencyStride: UInt32 = 1,
-       dominantFrequencyLength: UInt32 = 1,
-       logN: UInt32 = 12,
-       pitchRange: Float = 0.5,
-       minNoteTime: Float = 0.15,
-       minPower: Float = 120.0) {
+        dominantFrequencyStride: UInt32 = 1,
+        dominantFrequencyLength: UInt32 = 1,
+        logN: UInt32 = 12,
+        pitchRange: Float = 0.5,
+        minNoteTime: Float = 0.15,
+        minPower: Float = 120.0) {
     
     self.log2n = logN
     self.n = 1 << log2n

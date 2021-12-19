@@ -3,7 +3,7 @@ import AudioKitEX
 import SwiftUI
 import AVFoundation
 
-enum RecorderState {
+private enum RecorderState {
   case recording
   case playing
   case stopped
@@ -19,7 +19,7 @@ enum RecorderState {
   }
 }
 
-class RecorderConductor: ObservableObject {
+private class RecorderConductor: ObservableObject {
   let engine = AudioEngine()
   var recorder: NodeRecorder?
   let player = AudioPlayer()
@@ -30,37 +30,17 @@ class RecorderConductor: ObservableObject {
     didSet {
       guard oldValue != state else { return }
       do {
-        let document = try Current.coreData.getDocument()
         if state == .recording {
           NodeRecorder.removeTempFiles()
           try recorder?.record()
         } else if let recorder = self.recorder {
           if recorder.isRecording == true {
             recorder.stop()
-            if let url = recorder.audioFile?.url,
-               let destinationURL = document.audioFileURL {
-              let fileManager = FileManager.default
-              if fileManager.fileExists(atPath: destinationURL.path) {
-                try FileManager.default.removeItem(at: destinationURL)
-              }
-              try FileManager.default.moveItem(at: url, to: destinationURL)
-              print("*** tuning")
-              DispatchQueue.global().async {
-                do {
-                  try document.performAutocorrelation { error in
-                    print("*** done tuning: \(error?.localizedDescription ?? "no errors")")
-                    print("*** event count \(document.eventsSorted?.count ?? -1)")
-                  }
-                } catch {
-                  print(error)
-                }
-              }
-            }
           }
         }
 
         if state == .playing {
-          if let sourceURL = document.audioFileURL {
+          if let sourceURL = recorder?.audioFile?.url {
             try player.file = AVAudioFile(forReading: sourceURL)
             player.play()
             player.completionHandler = {
@@ -93,8 +73,9 @@ class RecorderConductor: ObservableObject {
     mixer.addInput(silencer)
     mixer.addInput(player)
     engine.output = mixer
+    NodeRecorder.removeTempFiles()
   }
-  
+
   func start() {
     do {
       try engine.start()
@@ -102,15 +83,16 @@ class RecorderConductor: ObservableObject {
       print(err)
     }
   }
-  
+
   func stop() {
     engine.stop()
   }
 }
 
 struct RecorderView: View {
-  @StateObject var conductor = RecorderConductor()
+  @StateObject private var conductor = RecorderConductor()
 
+  let onComplete: (URL?) -> Void
   var body: some View {
     VStack {
       Spacer()
@@ -121,7 +103,7 @@ struct RecorderView: View {
         .disabled(conductor.state != .stopped)
         .foregroundColor(conductor.state != .stopped ? .gray : .black)
         .onTapGesture {
-          self.conductor.state = .recording
+          conductor.state = .recording
         }
       Spacer()
       Text("Play")
@@ -129,7 +111,7 @@ struct RecorderView: View {
         .disabled(conductor.state != .stopped)
         .foregroundColor(conductor.state != .stopped ? .gray : .black)
         .onTapGesture {
-          self.conductor.state = .playing
+          conductor.state = .playing
         }
       Spacer()
       Text("Stop")
@@ -137,35 +119,21 @@ struct RecorderView: View {
         .disabled(conductor.state == .stopped)
         .foregroundColor(conductor.state == .stopped ? .gray : .black)
         .onTapGesture {
-          self.conductor.state = .stopped
+          conductor.state = .stopped
         }
       Spacer()
+      Text("Done")
+        .bold()
+        .onTapGesture {
+          onComplete(conductor.recorder?.audioFile?.url)
+        }
     }
-
     .padding()
     .onAppear {
-      self.conductor.start()
+      conductor.start()
     }
     .onDisappear {
-      self.conductor.stop()
+      conductor.stop()
     }
   }
-}
-
-private func shiftAudioURL(_ audioURL: URL, outputURL: URL) throws {
-  let (floatData, sampleRate) = try audioURL.readAudioFile()
-  guard let pitchShifter = PitchShifter(sampleRate: Float(sampleRate)) else { return }
-  //      pitchShifter.pitchTrack = document.frequencies
-  //      pitchShifter.powerTrack = document.powers
-  //      pitchShifter.finalPitchTrack = pitchShifter.pitchTrack
-  //      for ev in eventsSorted {
-  //        let start = Int(ev.start)
-  //        let end = Int(ev.end)
-  //        let f = pow(2, (ev.effectivePitch + 3) / 12) * 55
-  //        for i in start ..< end {
-  //          pitchShifter.finalPitchTrack?[i] = f
-  //        }
-  //      }
-  let shiftedAudio = pitchShifter.process(pitchShift: 1.2, indata: floatData)
-  try outputURL.writeAudioFile(shiftedAudio, sampleRate: sampleRate)
 }

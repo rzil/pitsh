@@ -361,7 +361,7 @@ extension PitshDocument {
       self.normalisedPowers = normalisedPowers
       self.powers = powers
       
-      (self.relatedEvents as! Set<PitshEvent>).forEach({moc.delete($0)})
+      (self.relatedEvents as! Set<PitshEvent>).forEach({ moc.delete($0) })
       
       for e in events {
         guard let PitshEvent = NSEntityDescription.insertNewObject(forEntityName: "PitshEvent", into: moc) as? PitshEvent else { print("failed to create PitshEvent object"); continue }

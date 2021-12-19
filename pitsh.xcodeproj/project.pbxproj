@@ -13,6 +13,12 @@
 		778CEBAE276D638F00E6C53E /* Recorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778CEBAC276D638F00E6C53E /* Recorder.swift */; };
 		778CEBB1276D930600E6C53E /* URL+AudioFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778CEBB0276D930600E6C53E /* URL+AudioFile.swift */; };
 		778CEBB2276D930600E6C53E /* URL+AudioFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778CEBB0276D930600E6C53E /* URL+AudioFile.swift */; };
+		778CEBB8276DA58B00E6C53E /* Pitsh.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 778CEBB6276DA58B00E6C53E /* Pitsh.xcdatamodeld */; };
+		778CEBB9276DA58B00E6C53E /* Pitsh.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 778CEBB6276DA58B00E6C53E /* Pitsh.xcdatamodeld */; };
+		778CEBBD276DA5FC00E6C53E /* PitshDocument+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778CEBBB276DA5FC00E6C53E /* PitshDocument+Extensions.swift */; };
+		778CEBBE276DA5FC00E6C53E /* PitshDocument+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778CEBBB276DA5FC00E6C53E /* PitshDocument+Extensions.swift */; };
+		778CEBBF276DA5FC00E6C53E /* PitshEvent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778CEBBC276DA5FC00E6C53E /* PitshEvent+Extensions.swift */; };
+		778CEBC0276DA5FC00E6C53E /* PitshEvent+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778CEBBC276DA5FC00E6C53E /* PitshEvent+Extensions.swift */; };
 		77C0D2CF26AA17A600670F6C /* Tests_iOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2CE26AA17A600670F6C /* Tests_iOS.swift */; };
 		77C0D2DA26AA17A600670F6C /* Tests_macOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2D926AA17A600670F6C /* Tests_macOS.swift */; };
 		77C0D2DC26AA17A600670F6C /* pitshApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2B326AA17A600670F6C /* pitshApp.swift */; };
@@ -53,6 +59,9 @@
 		77473C5C26C3547D0048F16E /* PitchShifter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PitchShifter.swift; sourceTree = "<group>"; };
 		778CEBAC276D638F00E6C53E /* Recorder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Recorder.swift; sourceTree = "<group>"; };
 		778CEBB0276D930600E6C53E /* URL+AudioFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+AudioFile.swift"; sourceTree = "<group>"; };
+		778CEBB7276DA58B00E6C53E /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		778CEBBB276DA5FC00E6C53E /* PitshDocument+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PitshDocument+Extensions.swift"; sourceTree = "<group>"; };
+		778CEBBC276DA5FC00E6C53E /* PitshEvent+Extensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "PitshEvent+Extensions.swift"; sourceTree = "<group>"; };
 		77C0D2B326AA17A600670F6C /* pitshApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = pitshApp.swift; sourceTree = "<group>"; };
 		77C0D2B426AA17A600670F6C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		77C0D2B526AA17A600670F6C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -106,6 +115,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		778CEBBA276DA5DE00E6C53E /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				778CEBB6276DA58B00E6C53E /* Pitsh.xcdatamodeld */,
+				778CEBBB276DA5FC00E6C53E /* PitshDocument+Extensions.swift */,
+				778CEBBC276DA5FC00E6C53E /* PitshEvent+Extensions.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		77C0D2AD26AA17A600670F6C = {
 			isa = PBXGroup;
 			children = (
@@ -121,6 +140,7 @@
 		77C0D2B226AA17A600670F6C /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				778CEBBA276DA5DE00E6C53E /* CoreData */,
 				77C0D2FF26AA1B6400670F6C /* processing */,
 				77C0D2B326AA17A600670F6C /* pitshApp.swift */,
 				778CEBAC276D638F00E6C53E /* Recorder.swift */,
@@ -353,13 +373,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				77473C5D26C3547D0048F16E /* PitchShifter.swift in Sources */,
+				778CEBBF276DA5FC00E6C53E /* PitshEvent+Extensions.swift in Sources */,
 				778CEBB1276D930600E6C53E /* URL+AudioFile.swift in Sources */,
+				778CEBBD276DA5FC00E6C53E /* PitshDocument+Extensions.swift in Sources */,
 				77C0D2FD26AA19AD00670F6C /* Utilities.swift in Sources */,
 				77C0D2FA26AA197A00670F6C /* PitchDetector.swift in Sources */,
 				77C0D2DE26AA17A600670F6C /* ContentView.swift in Sources */,
 				77C0D2F826AA197A00670F6C /* NoteDetector.swift in Sources */,
 				77C0D2DC26AA17A600670F6C /* pitshApp.swift in Sources */,
 				77C0D2F626AA197A00670F6C /* KeyDetector.swift in Sources */,
+				778CEBB8276DA58B00E6C53E /* Pitsh.xcdatamodeld in Sources */,
 				778CEBAD276D638F00E6C53E /* Recorder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -369,13 +392,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				77473C5E26C3547D0048F16E /* PitchShifter.swift in Sources */,
+				778CEBC0276DA5FC00E6C53E /* PitshEvent+Extensions.swift in Sources */,
 				778CEBB2276D930600E6C53E /* URL+AudioFile.swift in Sources */,
+				778CEBBE276DA5FC00E6C53E /* PitshDocument+Extensions.swift in Sources */,
 				77C0D2FE26AA19AD00670F6C /* Utilities.swift in Sources */,
 				77C0D2FB26AA197A00670F6C /* PitchDetector.swift in Sources */,
 				77C0D2DF26AA17A600670F6C /* ContentView.swift in Sources */,
 				77C0D2F926AA197A00670F6C /* NoteDetector.swift in Sources */,
 				77C0D2DD26AA17A600670F6C /* pitshApp.swift in Sources */,
 				77C0D2F726AA197A00670F6C /* KeyDetector.swift in Sources */,
+				778CEBB9276DA58B00E6C53E /* Pitsh.xcdatamodeld in Sources */,
 				778CEBAE276D638F00E6C53E /* Recorder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -765,6 +791,19 @@
 			productName = AudioKit;
 		};
 /* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		778CEBB6276DA58B00E6C53E /* Pitsh.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				778CEBB7276DA58B00E6C53E /* Model.xcdatamodel */,
+			);
+			currentVersion = 778CEBB7276DA58B00E6C53E /* Model.xcdatamodel */;
+			path = Pitsh.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 77C0D2AE26AA17A600670F6C /* Project object */;
 }

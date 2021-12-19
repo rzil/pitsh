@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="19574" systemVersion="20G224" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="PitshDocument" representedClassName="PitshDocument" syncable="YES" codeGenerationType="class">
+        <attribute name="audioFile" optional="YES" attributeType="String" defaultValueString="AudioFile" allowsExternalBinaryDataStorage="YES"/>
+        <attribute name="audioGain" attributeType="Float" minValueString="0" maxValueString="1" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="audioSampleRate" optional="YES" attributeType="Double" defaultValueString="44100" usesScalarValueType="YES"/>
+        <attribute name="autotuneEnabled" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="currentTime" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="frequencies" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[Float]"/>
+        <attribute name="key" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="maximumVisiblePitch" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="minimumVisiblePitch" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="needsPitchShift" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <attribute name="normalisedPowers" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[Float]"/>
+        <attribute name="pitches" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[Float]"/>
+        <attribute name="powers" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromData" customClassName="[Float]"/>
+        <attribute name="reverbEnabled" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="shiftedAudioFile" optional="YES" attributeType="String" defaultValueString="ShiftedAudioFile"/>
+        <attribute name="stepSize" optional="YES" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="title" optional="YES" attributeType="String"/>
+        <attribute name="tool" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="relatedEvents" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="PitshEvent" inverseName="relatedDocument" inverseEntity="PitshEvent"/>
+    </entity>
+    <entity name="PitshEvent" representedClassName="PitshEvent" syncable="YES" codeGenerationType="class">
+        <attribute name="avPitch" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="avPower" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="end" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="isSelected" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="maxPitch" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="minPitch" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="pitchEnd" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="pitchShift" optional="YES" attributeType="Float" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="pitchStart" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="start" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="relatedDocument" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PitshDocument" inverseName="relatedEvents" inverseEntity="PitshDocument"/>
+    </entity>
+    <elements>
+        <element name="PitshDocument" positionX="-63" positionY="-18" width="128" height="314"/>
+        <element name="PitshEvent" positionX="-54" positionY="9" width="128" height="194"/>
+    </elements>
+</model>

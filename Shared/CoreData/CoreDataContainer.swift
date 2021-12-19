@@ -20,6 +20,7 @@ final class CoreDataContainer: NSPersistentContainer {
     configureDefaults()
     loadStores()
     viewContext.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+    viewContext.undoManager = UndoManager()
   }
 
   private func configureDefaults(_ inMemory: Bool = false) {

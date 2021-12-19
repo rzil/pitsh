@@ -90,7 +90,7 @@ struct RecorderView: View {
     }
     
     .padding()
-    .navigationBarTitle(Text("Recorder"))
+//    .navigationBarTitle(Text("Recorder"))
     .onAppear {
       self.conductor.start()
     }

@@ -23,14 +23,17 @@ struct SongView: View {
   ) var events: FetchedResults<PitshEvent>
 
   @State var isRecorderPresented = false
+  @State var isProcessing = false
 
   var body: some View {
     VStack {
-      Text("Record")
-        .bold()
-        .onTapGesture {
-          isRecorderPresented = true
-        }
+      if isProcessing {
+        ProgressView()
+      }
+      Button(action: { isRecorderPresented = true }) {
+        Text("Record")
+      }
+      .disabled(isProcessing)
       Text("documents.count \(documents.count)")
       Text("events.count \(events.count)")
     }
@@ -44,6 +47,7 @@ struct SongView: View {
 
   func processAudio(_ url: URL) {
     guard let document = documents.first else { return }
+    isProcessing = true
     DispatchQueue.global().async {
       do {
         if let destinationURL = document.audioFileURL {
@@ -65,6 +69,7 @@ struct SongView: View {
       } catch {
         print(error)
       }
+      self.isProcessing = false
     }
   }
 }

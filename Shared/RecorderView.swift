@@ -98,35 +98,25 @@ struct RecorderView: View {
       Spacer()
       Text(conductor.state.string)
       Spacer()
-      Text("Record")
-        .bold()
-        .disabled(conductor.state != .stopped)
-        .foregroundColor(conductor.state != .stopped ? .gray : .black)
-        .onTapGesture {
-          conductor.state = .recording
-        }
+      Button(action: { conductor.state = .recording }) {
+        Text("Record")
+      }
+      .disabled(conductor.state != .stopped)
       Spacer()
-      Text("Play")
-        .bold()
-        .disabled(conductor.state != .stopped)
-        .foregroundColor(conductor.state != .stopped ? .gray : .black)
-        .onTapGesture {
-          conductor.state = .playing
-        }
+      Button(action: { conductor.state = .playing }) {
+        Text("Play")
+      }
+      .disabled(conductor.state != .stopped)
       Spacer()
-      Text("Stop")
-        .bold()
-        .disabled(conductor.state == .stopped)
-        .foregroundColor(conductor.state == .stopped ? .gray : .black)
-        .onTapGesture {
-          conductor.state = .stopped
-        }
+      Button(action: { conductor.state = .stopped }) {
+        Text("Stop")
+      }
+      .disabled(conductor.state == .stopped)
       Spacer()
-      Text("Done")
-        .bold()
-        .onTapGesture {
-          onComplete(conductor.recorder?.audioFile?.url)
-        }
+      Button(action: { onComplete(conductor.recorder?.audioFile?.url) }) {
+        Text("Done")
+      }
+      .disabled(conductor.state != .stopped)
     }
     .padding()
     .onAppear {

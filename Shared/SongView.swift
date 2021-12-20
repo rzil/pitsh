@@ -25,25 +25,40 @@ struct SongView: View {
   @State var isRecorderPresented = false
   @State var isProcessing = false
 
-  var body: some View {
-    ZStack {
-      WaveView()
-      VStack {
-        if isProcessing {
-          ProgressView()
-        }
-        Button(action: { isRecorderPresented = true }) {
-          Text("Record")
-        }
-        .disabled(isProcessing)
-        Text("documents.count \(documents.count)")
-        Text("events.count \(events.count)")
-      }
+  private let secondsPerScreen: Double = 5
+  private var scrollWidth: CGFloat {
+    var width: CGFloat = 1000
+    let document = documents.first!
+    let pitches = document.pitches!
+    let framesPerScreen = document.audioSampleRate / Double(document.stepSize) * secondsPerScreen
+    if (Double(pitches.count) > framesPerScreen) {
+      width *= CGFloat(Double(pitches.count) / framesPerScreen)
     }
-    .sheet(isPresented: $isRecorderPresented) {
-      RecorderView { url in
-        url.map(processAudio)
-        isRecorderPresented = false
+    return width
+  }
+
+  var body: some View {
+    ScrollView(.horizontal) {
+      ZStack {
+        WaveView()
+        VStack {
+          if isProcessing {
+            ProgressView()
+          }
+          Button(action: { isRecorderPresented = true }) {
+            Text("Record")
+          }
+          .disabled(isProcessing)
+          Text("documents.count \(documents.count)")
+          Text("events.count \(events.count)")
+        }
+      }
+      .frame(width: scrollWidth)
+      .sheet(isPresented: $isRecorderPresented) {
+        RecorderView { url in
+          url.map(processAudio)
+          isRecorderPresented = false
+        }
       }
     }
   }

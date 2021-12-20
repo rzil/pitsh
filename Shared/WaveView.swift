@@ -14,24 +14,21 @@ struct WaveView: View {
   ) var documents: FetchedResults<PitshDocument>
 
   var body: some View {
-    VStack {
-      GeometryReader { geometry in
-        if let document = self.documents.first {
-          let paths = strokes(width: geometry.size.width, height: geometry.size.height, document: document)
-          ForEach(paths) { strokePath in
-            Path { path in
-              path.move(to: strokePath.start)
-              for pt in strokePath.points {
-                path.addLine(to: pt)
-              }
+    GeometryReader { geometry in
+      if let document = self.documents.first {
+        let paths = strokes(width: geometry.size.width, height: geometry.size.height, document: document)
+        ForEach(paths) { strokePath in
+          Path { path in
+            path.move(to: strokePath.start)
+            for pt in strokePath.points {
+              path.addLine(to: pt)
             }
-            .stroke()
           }
+          .stroke()
         }
       }
-      .aspectRatio(1, contentMode: .fit)
-      .background(Color.purple)
     }
+    .background(Color.purple)
   }
 }
 

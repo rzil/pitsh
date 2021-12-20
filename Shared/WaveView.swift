@@ -24,11 +24,10 @@ struct WaveView: View {
               path.addLine(to: pt)
             }
           }
-          .stroke()
+          .stroke(Color.red, lineWidth: 1.5)
         }
       }
     }
-    .background(Color.purple)
   }
 }
 

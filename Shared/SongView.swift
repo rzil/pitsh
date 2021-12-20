@@ -39,27 +39,27 @@ struct SongView: View {
 
   var body: some View {
     ScrollView(.horizontal) {
-      ZStack {
-        WaveView()
-        VStack {
-          if isProcessing {
-            ProgressView()
+      WaveView()
+        .frame(width: scrollWidth)
+        .toolbar {
+          ToolbarItem(placement: .bottomBar) {
+            if isProcessing {
+              ProgressView()
+            }
           }
-          Button(action: { isRecorderPresented = true }) {
-            Text("Record")
+          ToolbarItem(placement: .bottomBar) {
+            Button(action: { isRecorderPresented = true }) {
+              Text("Record")
+            }
+            .disabled(isProcessing)
           }
-          .disabled(isProcessing)
-          Text("documents.count \(documents.count)")
-          Text("events.count \(events.count)")
         }
-      }
-      .frame(width: scrollWidth)
-      .sheet(isPresented: $isRecorderPresented) {
-        RecorderView { url in
-          url.map(processAudio)
-          isRecorderPresented = false
+        .sheet(isPresented: $isRecorderPresented) {
+          RecorderView { url in
+            url.map(processAudio)
+            isRecorderPresented = false
+          }
         }
-      }
     }
   }
 

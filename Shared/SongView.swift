@@ -26,16 +26,19 @@ struct SongView: View {
   @State var isProcessing = false
 
   var body: some View {
-    VStack {
-      if isProcessing {
-        ProgressView()
+    ZStack {
+      WaveView()
+      VStack {
+        if isProcessing {
+          ProgressView()
+        }
+        Button(action: { isRecorderPresented = true }) {
+          Text("Record")
+        }
+        .disabled(isProcessing)
+        Text("documents.count \(documents.count)")
+        Text("events.count \(events.count)")
       }
-      Button(action: { isRecorderPresented = true }) {
-        Text("Record")
-      }
-      .disabled(isProcessing)
-      Text("documents.count \(documents.count)")
-      Text("events.count \(events.count)")
     }
     .sheet(isPresented: $isRecorderPresented) {
       RecorderView { url in

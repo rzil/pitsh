@@ -49,6 +49,8 @@
 		77C0D2FB26AA197A00670F6C /* PitchDetector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2F526AA197A00670F6C /* PitchDetector.swift */; };
 		77C0D2FD26AA19AD00670F6C /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2FC26AA19AD00670F6C /* Utilities.swift */; };
 		77C0D2FE26AA19AD00670F6C /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2FC26AA19AD00670F6C /* Utilities.swift */; };
+		77EC5AEB27713E2B00678CE1 /* NoteNamesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EC5AEA27713E2B00678CE1 /* NoteNamesView.swift */; };
+		77EC5AEC27713E2B00678CE1 /* NoteNamesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EC5AEA27713E2B00678CE1 /* NoteNamesView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +101,7 @@
 		77C0D2F426AA197A00670F6C /* NoteDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoteDetector.swift; sourceTree = "<group>"; };
 		77C0D2F526AA197A00670F6C /* PitchDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PitchDetector.swift; sourceTree = "<group>"; };
 		77C0D2FC26AA19AD00670F6C /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		77EC5AEA27713E2B00678CE1 /* NoteNamesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteNamesView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +186,7 @@
 				77C0D2B326AA17A600670F6C /* pitshApp.swift */,
 				778CEBAC276D638F00E6C53E /* RecorderView.swift */,
 				774186F0276FC3D30068D524 /* SongView.swift */,
+				77EC5AEA27713E2B00678CE1 /* NoteNamesView.swift */,
 				774186F4276FEE8A0068D524 /* WaveView.swift */,
 				778CEBCB276EB29600E6C53E /* Helpers.swift */,
 				77C0D2B426AA17A600670F6C /* ContentView.swift */,
@@ -422,6 +426,7 @@
 				774186F1276FC3D30068D524 /* SongView.swift in Sources */,
 				778CEBB1276D930600E6C53E /* URL+AudioFile.swift in Sources */,
 				778CEBC5276EB19C00E6C53E /* GlobalEnvironment.swift in Sources */,
+				77EC5AEB27713E2B00678CE1 /* NoteNamesView.swift in Sources */,
 				778CEBC9276EB1D300E6C53E /* CoreData.swift in Sources */,
 				778CEBBD276DA5FC00E6C53E /* PitshDocument+Extensions.swift in Sources */,
 				774186F5276FEE8A0068D524 /* WaveView.swift in Sources */,
@@ -447,6 +452,7 @@
 				774186F2276FC3D30068D524 /* SongView.swift in Sources */,
 				778CEBB2276D930600E6C53E /* URL+AudioFile.swift in Sources */,
 				778CEBC6276EB19C00E6C53E /* GlobalEnvironment.swift in Sources */,
+				77EC5AEC27713E2B00678CE1 /* NoteNamesView.swift in Sources */,
 				778CEBCA276EB1D300E6C53E /* CoreData.swift in Sources */,
 				778CEBBE276DA5FC00E6C53E /* PitshDocument+Extensions.swift in Sources */,
 				774186F6276FEE8A0068D524 /* WaveView.swift in Sources */,

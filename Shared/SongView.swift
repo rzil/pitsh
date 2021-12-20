@@ -38,28 +38,35 @@ struct SongView: View {
   }
 
   var body: some View {
-    ScrollView(.horizontal) {
-      WaveView()
-        .frame(width: scrollWidth)
-        .toolbar {
-          ToolbarItem(placement: .bottomBar) {
-            if isProcessing {
-              ProgressView()
-            }
-          }
-          ToolbarItem(placement: .bottomBar) {
-            Button(action: { isRecorderPresented = true }) {
-              Text("Record")
-            }
-            .disabled(isProcessing)
-          }
+    ZStack {
+      ScrollView(.horizontal) {
+        WaveView()
+          .frame(width: scrollWidth)
+      }
+      HStack {
+        NoteNamesView()
+          .frame(width: 32)
+        Spacer()
+      }
+    }
+    .toolbar {
+      ToolbarItem(placement: .bottomBar) {
+        if isProcessing {
+          ProgressView()
         }
-        .sheet(isPresented: $isRecorderPresented) {
-          RecorderView { url in
-            url.map(processAudio)
-            isRecorderPresented = false
-          }
+      }
+      ToolbarItem(placement: .bottomBar) {
+        Button(action: { isRecorderPresented = true }) {
+          Text("Record")
         }
+        .disabled(isProcessing)
+      }
+    }
+    .sheet(isPresented: $isRecorderPresented) {
+      RecorderView { url in
+        url.map(processAudio)
+        isRecorderPresented = false
+      }
     }
   }
 

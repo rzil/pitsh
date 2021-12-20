@@ -7,6 +7,9 @@
 
 import SwiftUI
 
+private let gridColor1 = Color(red: 0.8, green: 0.8, blue: 1, opacity: 1)
+private let gridColor2 = Color(red: 0.9, green: 0.9, blue: 1, opacity: 1)
+
 struct WaveView: View {
   @FetchRequest(
     entity: PitshDocument.entity(),
@@ -16,6 +19,16 @@ struct WaveView: View {
   var body: some View {
     GeometryReader { geometry in
       if let document = self.documents.first {
+        // draw grid
+        let rects = grid(width: geometry.size.width, height: geometry.size.height, document: document)
+        ForEach(rects) { r in
+          Rectangle()
+              .fill(gridColor2)
+              .offset(x: r.rect.minX, y: r.rect.minY)
+              .frame(width: r.rect.width, height: r.rect.height)
+        }
+
+        // draw audio
         let paths = strokes(width: geometry.size.width, height: geometry.size.height, document: document)
         ForEach(paths) { strokePath in
           Path { path in
@@ -28,10 +41,28 @@ struct WaveView: View {
         }
       }
     }
+    .background(gridColor1)
   }
 }
 
-struct Stroke: Identifiable {
+private struct GridRectangle: Identifiable {
+  let id = UUID()
+  let rect: CGRect
+}
+
+private func grid(width: CGFloat, height: CGFloat, document: PitshDocument) -> [GridRectangle] {
+  let (smallest, biggest) = document.visiblePitchRange
+  let minPitch = Int(smallest)
+  let maxPitch = Int(biggest + 3)
+  var rects: [CGRect] = []
+  for idx in stride(from: minPitch, to: maxPitch, by: 2) {
+      let y = document.convert(pitch: Float(idx) + 0.5, containerHeight: height)
+      rects.append(CGRect(x: 0, y: y, width: width, height: document.gridSpacing(containerHeight: height)))
+  }
+  return rects.map(GridRectangle.init(rect:))
+}
+
+private struct Stroke: Identifiable {
   let id = UUID()
   let start: CGPoint
   var points: [CGPoint] = []

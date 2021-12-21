@@ -39,35 +39,35 @@ struct SongView: View {
   }
 
   var body: some View {
-    ZStack {
-      if documents.first?.pitches != nil {
-        ScrollView(.horizontal) {
-          WaveView()
-            .frame(width: scrollWidth)
+    VStack {
+      ZStack {
+        if documents.first?.pitches != nil {
+          ScrollView(.horizontal) {
+            WaveView()
+              .frame(width: scrollWidth)
+          }
+          HStack {
+            NoteNamesView()
+              .frame(width: 32)
+              .clipped()
+            Spacer()
+          }
+        } else {
+          Text("Please record some audio")
         }
-        HStack {
-          NoteNamesView()
-            .frame(width: 32)
-          Spacer()
-        }
-      } else {
-        Text("Please record some audio")
       }
-    }
-    .toolbar {
-      let placement = toolbarPlacement()
-      ToolbarItem(placement: placement) {
+      HStack {
         if isProcessing {
           ProgressView()
+        } else {
+          Button(action: { isRecorderPresented = true }) {
+            Text("Record")
+          }
         }
       }
-      ToolbarItem(placement: placement) {
-        Button(action: { isRecorderPresented = true }) {
-          Text("Record")
-        }
-        .disabled(isProcessing)
-      }
+      Spacer()
     }
+    .navigationTitle("Pitsh")
     .sheet(isPresented: $isRecorderPresented) {
       RecorderView { url in
         url.map(processAudio)
@@ -76,7 +76,7 @@ struct SongView: View {
     }
   }
 
-  func processAudio(_ url: URL) {
+  private func processAudio(_ url: URL) {
     guard let document = documents.first else { return }
     isProcessing = true
     DispatchQueue.global().async {
@@ -103,14 +103,6 @@ struct SongView: View {
       self.isProcessing = false
     }
   }
-}
-
-private func toolbarPlacement() -> ToolbarItemPlacement {
-#if iOS
-  return .bottomBar
-#else
-  return .automatic
-#endif
 }
 
 //struct SongView_Previews: PreviewProvider {

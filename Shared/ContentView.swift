@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
   var body: some View {
     let context = Current.coreData.persistentContainer().viewContext
+    let _ = try! Current.coreData.getDocument()
     SongView().environment(\.managedObjectContext, context)
   }
 }

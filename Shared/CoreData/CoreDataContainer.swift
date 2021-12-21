@@ -25,10 +25,9 @@ final class CoreDataContainer: NSPersistentContainer, ObservableObject {
 
   private func configureDefaults(_ inMemory: Bool = false) {
     if let storeDescription = persistentStoreDescriptions.first {
-      storeDescription.shouldAddStoreAsynchronously = true
+      storeDescription.shouldAddStoreAsynchronously = false
       if inMemory {
         storeDescription.type = NSInMemoryStoreType
-        storeDescription.shouldAddStoreAsynchronously = false
       }
     }
   }

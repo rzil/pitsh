@@ -28,8 +28,9 @@ struct SongView: View {
   private let secondsPerScreen: Double = 5
   private var scrollWidth: CGFloat {
     var width: CGFloat = 1000
-    let document = documents.first!
-    let pitches = document.pitches!
+    guard let document = documents.first,
+          let pitches = document.pitches
+    else { return 0 }
     let framesPerScreen = document.audioSampleRate / Double(document.stepSize) * secondsPerScreen
     if (Double(pitches.count) > framesPerScreen) {
       width *= CGFloat(Double(pitches.count) / framesPerScreen)
@@ -39,23 +40,26 @@ struct SongView: View {
 
   var body: some View {
     ZStack {
-      ScrollView(.horizontal) {
-        WaveView()
-          .frame(width: scrollWidth)
-      }
-      HStack {
-        NoteNamesView()
-          .frame(width: 32)
-        Spacer()
+      if documents.first?.pitches != nil {
+        ScrollView(.horizontal) {
+          WaveView()
+            .frame(width: scrollWidth)
+        }
+        HStack {
+          NoteNamesView()
+            .frame(width: 32)
+          Spacer()
+        }
       }
     }
     .toolbar {
-      ToolbarItem(placement: .bottomBar) {
+      let placement = toolbarPlacement()
+      ToolbarItem(placement: placement) {
         if isProcessing {
           ProgressView()
         }
       }
-      ToolbarItem(placement: .bottomBar) {
+      ToolbarItem(placement: placement) {
         Button(action: { isRecorderPresented = true }) {
           Text("Record")
         }
@@ -97,6 +101,15 @@ struct SongView: View {
       self.isProcessing = false
     }
   }
+}
+
+private func toolbarPlacement() -> ToolbarItemPlacement {
+//  if #available(iOS 14, *) {
+//    return .bottomBar
+//  } else {
+//    return .automatic
+//  }
+  return .automatic
 }
 
 //struct SongView_Previews: PreviewProvider {

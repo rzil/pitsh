@@ -50,6 +50,8 @@ struct SongView: View {
             .frame(width: 32)
           Spacer()
         }
+      } else {
+        Text("Please record some audio")
       }
     }
     .toolbar {
@@ -104,12 +106,11 @@ struct SongView: View {
 }
 
 private func toolbarPlacement() -> ToolbarItemPlacement {
-//  if #available(iOS 14, *) {
-//    return .bottomBar
-//  } else {
-//    return .automatic
-//  }
+#if iOS
+  return .bottomBar
+#else
   return .automatic
+#endif
 }
 
 //struct SongView_Previews: PreviewProvider {

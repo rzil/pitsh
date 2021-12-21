@@ -11,7 +11,9 @@ struct ContentView: View {
   var body: some View {
     let context = Current.coreData.persistentContainer().viewContext
     let _ = try! Current.coreData.getDocument()
-    SongView().environment(\.managedObjectContext, context)
+    SongView()
+      .environment(\.managedObjectContext, context)
+      .frame(minWidth: 400, minHeight: 200)
   }
 }
 

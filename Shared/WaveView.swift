@@ -31,13 +31,8 @@ struct WaveView: View {
         // draw audio
         let paths = strokes(width: geometry.size.width, height: geometry.size.height, document: document)
         ForEach(paths) { strokePath in
-          Path { path in
-            path.move(to: strokePath.start)
-            for pt in strokePath.points {
-              path.addLine(to: pt)
-            }
-          }
-          .stroke(Color.red, lineWidth: 1.5)
+          strokePath.path
+            .stroke(Color.red, lineWidth: 1.5)
         }
       }
     }
@@ -60,12 +55,6 @@ private func grid(width: CGFloat, height: CGFloat, document: PitshDocument) -> [
       rects.append(CGRect(x: 0, y: y, width: width, height: document.gridSpacing(containerHeight: height)))
   }
   return rects.map(GridRectangle.init(rect:))
-}
-
-private struct Stroke: Identifiable {
-  let id = UUID()
-  let start: CGPoint
-  var points: [CGPoint] = []
 }
 
 private func strokes(width: CGFloat, height: CGFloat, document: PitshDocument) -> [Stroke] {

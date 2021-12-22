@@ -71,7 +71,8 @@ struct NotesView: View {
 
 private func frameForEvent(_ event: PitshEvent, geometry: GeometryProxy) -> CGRect? {
   guard let document = event.relatedDocument,
-        let pitchesCount = document.pitches?.count
+        let pitchesCount = document.pitches?.count,
+        pitchesCount > 0
   else { return nil }
   let width = geometry.size.width
   let height = geometry.size.height

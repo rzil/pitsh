@@ -1,6 +1,6 @@
 //
 //  Utilities.swift
-//  Nika
+//  Pitsh
 //
 //  Created by Ruben Zilibowitz on 22/9/18.
 //  Copyright © 2018 Ruben Zilibowitz. All rights reserved.

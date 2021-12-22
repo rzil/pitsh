@@ -1,6 +1,6 @@
 //
 //  KeyDetector.swift
-//  Nika
+//  Pitsh
 //
 //  Created by Ruben Zilibowitz on 30/8/18.
 //  Copyright © 2018 Ruben Zilibowitz. All rights reserved.

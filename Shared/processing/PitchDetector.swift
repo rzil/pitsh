@@ -1,6 +1,6 @@
 //
 //  PitchDetector.swift
-//  Nika
+//  Pitsh
 //
 //  Created by Ruben Zilibowitz on 27/8/18.
 //  Copyright © 2018 Ruben Zilibowitz. All rights reserved.

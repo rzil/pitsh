@@ -1,6 +1,6 @@
 //
 //  PitshEvent+Extensions.swift
-//  Nika
+//  Pitsh
 //
 //  Created by Ruben Zilibowitz on 10/9/18.
 //  Copyright © 2018 Ruben Zilibowitz. All rights reserved.

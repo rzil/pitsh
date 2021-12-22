@@ -1,6 +1,6 @@
 //
 //  PitchShifter.swift
-//  Nika
+//  Pitsh
 //
 //  Created by Ruben Zilibowitz on 24/2/19.
 //  Copyright © 2019 Ruben Zilibowitz. All rights reserved.

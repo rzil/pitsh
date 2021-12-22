@@ -7,15 +7,19 @@
 
 import SwiftUI
 
+private let showBounds: Bool = false
+
 struct NoteView: View {
   let event: PitshEvent
 
   var body: some View {
     GeometryReader { geometry in
       let bounds = geometry.frame(in: .local)
-      Rectangle()
-        .stroke(Color(white: 0.5, opacity: 1))
-        .frame(width: bounds.width, height: bounds.height)
+      if showBounds {
+        Rectangle()
+          .stroke(Color(white: 0.5, opacity: 1))
+          .frame(width: bounds.width, height: bounds.height)
+      }
       let middleHue = CGFloat(fmodf_pos(1.0/6.0 + event.pitchShift*0.2, 1.0))
       let middleColor = Color(hue: middleHue, saturation: 0.25, brightness: 1, opacity: 1)
       let outerColor = Color(hue: middleHue, saturation: 1, brightness: 1, opacity: 1)

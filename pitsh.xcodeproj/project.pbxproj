@@ -155,6 +155,19 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		776378A22772B1F700C32125 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				778CEBAC276D638F00E6C53E /* RecorderView.swift */,
+				774186F0276FC3D30068D524 /* SongView.swift */,
+				77EC5AED2771674D00678CE1 /* NoteView.swift */,
+				7763789E2772A1D300C32125 /* NotesView.swift */,
+				77EC5AEA27713E2B00678CE1 /* NoteNamesView.swift */,
+				774186F4276FEE8A0068D524 /* WaveView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		778CEBBA276DA5DE00E6C53E /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
@@ -195,12 +208,7 @@
 				778CEBBA276DA5DE00E6C53E /* CoreData */,
 				77C0D2FF26AA1B6400670F6C /* processing */,
 				77C0D2B326AA17A600670F6C /* pitshApp.swift */,
-				778CEBAC276D638F00E6C53E /* RecorderView.swift */,
-				774186F0276FC3D30068D524 /* SongView.swift */,
-				77EC5AED2771674D00678CE1 /* NoteView.swift */,
-				7763789E2772A1D300C32125 /* NotesView.swift */,
-				77EC5AEA27713E2B00678CE1 /* NoteNamesView.swift */,
-				774186F4276FEE8A0068D524 /* WaveView.swift */,
+				776378A22772B1F700C32125 /* Views */,
 				77EC5AF1277262F300678CE1 /* Stroke.swift */,
 				778CEBCB276EB29600E6C53E /* Helpers.swift */,
 				77C0D2B426AA17A600670F6C /* ContentView.swift */,

@@ -45,7 +45,8 @@ private func noteNames(height: CGFloat, document: PitshDocument) -> [NoteName] {
     NoteName(
       name: noteName(from: $0),
       height: noteHeight,
-      minY:  height * (1 - CGFloat((Float($0) - smallest) / range)) - 0.5 * noteHeight)
+      minY:  height * (1 - CGFloat((Float($0) - smallest) / range)) - 0.5 * noteHeight
+    )
   }
 }
 

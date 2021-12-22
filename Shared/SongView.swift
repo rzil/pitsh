@@ -43,8 +43,11 @@ struct SongView: View {
       ZStack {
         if documents.first?.pitches != nil {
           ScrollView(.horizontal) {
-            WaveView()
-              .frame(width: scrollWidth)
+            ZStack {
+              WaveView()
+              NotesView()
+            }
+            .frame(width: scrollWidth)
           }
           HStack {
             NoteNamesView()

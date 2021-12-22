@@ -8,26 +8,24 @@
 import SwiftUI
 
 struct NoteView: View {
-  @State var event: PitshEvent?
+  let event: PitshEvent
 
   var body: some View {
     GeometryReader { geometry in
-      if let event = self.event {
-        let bounds = geometry.frame(in: .local)
-        Rectangle()
-          .stroke(Color(white: 0.5, opacity: 1))
-          .frame(width: bounds.width, height: bounds.height)
-        let middleHue = CGFloat(fmodf_pos(1.0/6.0 + event.pitchShift*0.2, 1.0))
-        let middleColor = Color(hue: middleHue, saturation: 0.25, brightness: 1, opacity: 1)
-        let outerColor = Color(hue: middleHue, saturation: 1, brightness: 1, opacity: 1)
-        let stroke = stroke(frame: bounds, event: event)
-        stroke?.path
-          .fill(.linearGradient(
-            Gradient(colors: [outerColor, middleColor, outerColor]),
-            startPoint: UnitPoint(x: 0.5, y: 0),
-            endPoint: UnitPoint(x: 0.5, y: 1)
-          ))
-      }
+      let bounds = geometry.frame(in: .local)
+      Rectangle()
+        .stroke(Color(white: 0.5, opacity: 1))
+        .frame(width: bounds.width, height: bounds.height)
+      let middleHue = CGFloat(fmodf_pos(1.0/6.0 + event.pitchShift*0.2, 1.0))
+      let middleColor = Color(hue: middleHue, saturation: 0.25, brightness: 1, opacity: 1)
+      let outerColor = Color(hue: middleHue, saturation: 1, brightness: 1, opacity: 1)
+      let stroke = stroke(frame: bounds, event: event)
+      stroke?.path
+        .fill(.linearGradient(
+          Gradient(colors: [outerColor, middleColor, outerColor]),
+          startPoint: UnitPoint(x: 0.5, y: 0),
+          endPoint: UnitPoint(x: 0.5, y: 1)
+        ))
     }
   }
 }

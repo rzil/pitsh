@@ -121,11 +121,11 @@ struct SongView: View {
         if let error = $0 {
           print(error)
         } else {
-          // play shifted audio
+          Current.conductor.state = .playing(document.shiftedAudioFileURL)
         }
       }
     } else {
-      // play shifted audio
+      Current.conductor.state = .playing(document.shiftedAudioFileURL)
     }
   }
 }

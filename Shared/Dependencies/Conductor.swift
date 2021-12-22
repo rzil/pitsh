@@ -12,7 +12,7 @@ import Foundation
 
 enum RecorderState {
   case recording
-  case playing
+  case playing(URL?)
   case stopped
   init() {
     self = .stopped
@@ -24,6 +24,12 @@ enum RecorderState {
     case .stopped: return "Stopped"
     }
   }
+  var isStopped: Bool {
+    if case .stopped = self {
+      return true
+    }
+    return false
+  }
 }
 
 class Conductor: ObservableObject {
@@ -33,29 +39,29 @@ class Conductor: ObservableObject {
 
   @Published var state = RecorderState() {
     didSet {
-      guard oldValue != state else { return }
+      if let recorder = self.recorder,
+         recorder.isRecording == true {
+        recorder.stop()
+      }
       do {
-        if state == .recording {
+        switch state {
+        case .recording:
           NodeRecorder.removeTempFiles()
           try recorder?.record()
-        } else if let recorder = self.recorder {
-          if recorder.isRecording == true {
-            recorder.stop()
-          }
-        }
-
-        if state == .playing {
-          if let sourceURL = recorder?.audioFile?.url {
+        case .playing(let url):
+          if let sourceURL = url ?? recorder?.audioFile?.url {
             try player.file = AVAudioFile(forReading: sourceURL)
-            player.play()
             player.completionHandler = {
-              DispatchQueue.main.async {
-                self.state = .stopped
+              DispatchQueue.main.async { [weak self] in
+                self?.state = .stopped
               }
             }
+            player.play()
           }
-        } else {
-          player.stop()
+        case .stopped:
+          if player.isPlaying {
+            player.stop()
+          }
         }
       } catch {
         print(error)

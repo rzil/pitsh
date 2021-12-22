@@ -189,8 +189,8 @@
 			isa = PBXGroup;
 			children = (
 				778CEBC8276EB1D300E6C53E /* CoreData.swift */,
-				778CEBC4276EB19C00E6C53E /* GlobalEnvironment.swift */,
 				776378A62773D5B200C32125 /* Conductor.swift */,
+				778CEBC4276EB19C00E6C53E /* GlobalEnvironment.swift */,
 			);
 			path = Dependencies;
 			sourceTree = "<group>";

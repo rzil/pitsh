@@ -12,29 +12,23 @@ struct RecorderView: View {
       Button(action: { conductor.state = .recording }) {
         Text("Record")
       }
-      .disabled(conductor.state != .stopped)
+      .disabled(!conductor.state.isStopped)
       Spacer()
-      Button(action: { conductor.state = .playing }) {
+      Button(action: { conductor.state = .playing(nil) }) {
         Text("Play")
       }
-      .disabled(conductor.state != .stopped)
+      .disabled(!conductor.state.isStopped)
       Spacer()
       Button(action: { conductor.state = .stopped }) {
         Text("Stop")
       }
-      .disabled(conductor.state == .stopped)
+      .disabled(conductor.state.isStopped)
       Spacer()
       Button(action: { onComplete(conductor.recorder?.audioFile?.url) }) {
         Text("Done")
       }
-      .disabled(conductor.state != .stopped)
+      .disabled(!conductor.state.isStopped)
     }
     .padding()
-    .onAppear {
-      conductor.start()
-    }
-    .onDisappear {
-      conductor.stop()
-    }
   }
 }

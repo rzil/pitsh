@@ -35,6 +35,19 @@ struct NotesView: View {
             .onTapGesture(perform: {
               event.isSelected.toggle()
             })
+            .gesture(
+              DragGesture()
+                .onEnded({ value in
+                  let shift = document.convertVerticalShiftToPitch(
+                    from: value.translation.height,
+                    containerHeight: height
+                  )
+                  event.pitchShift += shift
+                })
+                .onChanged { value in
+//                  event.yShift = value.translation.height
+                }
+            )
             .offset(
               x: xpos,
               y: ypos

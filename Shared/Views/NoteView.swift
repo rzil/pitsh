@@ -10,7 +10,7 @@ import SwiftUI
 private let showBounds: Bool = false
 
 struct NoteView: View {
-  let event: PitshEvent
+  @StateObject var event: PitshEvent
 
   var body: some View {
     GeometryReader { geometry in
@@ -20,9 +20,10 @@ struct NoteView: View {
           .stroke(Color(white: 0.5, opacity: 1))
           .frame(width: bounds.width, height: bounds.height)
       }
+      let brightness = event.isSelected ? 0.6 : 1
       let middleHue = CGFloat(fmodf_pos(1.0/6.0 + event.pitchShift*0.2, 1.0))
-      let middleColor = Color(hue: middleHue, saturation: 0.25, brightness: 1, opacity: 1)
-      let outerColor = Color(hue: middleHue, saturation: 1, brightness: 1, opacity: 1)
+      let middleColor = Color(hue: middleHue, saturation: 0.25, brightness: brightness, opacity: 1)
+      let outerColor = Color(hue: middleHue, saturation: 1, brightness: brightness, opacity: 1)
       let stroke = stroke(frame: bounds, event: event)
       stroke?.path
         .fill(.linearGradient(

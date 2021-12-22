@@ -32,6 +32,9 @@ struct NotesView: View {
           let xpos = width * mid_x - 0.5 * noteWidth
           let ypos = height * (1 - CGFloat(((event.avPitch + event.pitchShift)-smallest)/range)) - 0.5 * noteHeight
           NoteView(event: event)
+            .onTapGesture(perform: {
+              event.isSelected.toggle()
+            })
             .offset(
               x: xpos,
               y: ypos

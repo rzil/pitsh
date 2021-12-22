@@ -15,51 +15,76 @@ struct NotesView: View {
     ]
   ) var events: FetchedResults<PitshEvent>
 
+  @State var draggedEvent: (PitshEvent,CGFloat)?
+
   var body: some View {
     GeometryReader { geometry in
-      if let document = events.first?.relatedDocument,
-         let pitchesCount = document.pitches?.count {
-        let width = geometry.size.width
-        let height = geometry.size.height
-        let (smallest, biggest) = document.visiblePitchRange
-        let range = biggest - smallest
-        let noteHeight = height / CGFloat(range)
-        ForEach(events) { event in
-          let start_x = CGFloat(event.start) / CGFloat(pitchesCount)
-          let end_x = CGFloat(event.end) / CGFloat(pitchesCount)
-          let mid_x = 0.5 * (start_x + end_x)
-          let noteWidth = width * (end_x - start_x)
-          let xpos = width * mid_x - 0.5 * noteWidth
-          let ypos = height * (1 - CGFloat(((event.avPitch + event.pitchShift)-smallest)/range)) - 0.5 * noteHeight
+      ForEach(events) { event in
+        if let frame = frameForEvent(event, geometry: geometry) {
           NoteView(event: event)
             .onTapGesture(perform: {
               event.isSelected.toggle()
             })
-            .gesture(
+            .highPriorityGesture(
               DragGesture()
                 .onEnded({ value in
-                  let shift = document.convertVerticalShiftToPitch(
+                  draggedEvent = nil
+                  if let shift = event.relatedDocument?.convertVerticalShiftToPitch(
                     from: value.translation.height,
-                    containerHeight: height
-                  )
-                  event.pitchShift += shift
+                    containerHeight: geometry.size.height
+                  ) {
+                    event.pitchShift += shift
+                  }
                 })
                 .onChanged { value in
-//                  event.yShift = value.translation.height
+                  draggedEvent = (event, value.translation.height)
                 }
             )
             .offset(
-              x: xpos,
-              y: ypos
+              x: frame.minX,
+              y: frame.minY
             )
             .frame(
-              width: noteWidth,
-              height: noteHeight
+              width: frame.width,
+              height: frame.height
+            )
+        }
+      }
+
+      if let (event, yOffset) = draggedEvent {
+        if let frame = frameForEvent(event, geometry: geometry) {
+          NoteView(event: event)
+            .opacity(0.5)
+            .offset(
+              x: frame.minX,
+              y: frame.minY + yOffset
+            )
+            .frame(
+              width: frame.width,
+              height: frame.height
             )
         }
       }
     }
   }
+}
+
+private func frameForEvent(_ event: PitshEvent, geometry: GeometryProxy) -> CGRect? {
+  guard let document = event.relatedDocument,
+        let pitchesCount = document.pitches?.count
+  else { return nil }
+  let width = geometry.size.width
+  let height = geometry.size.height
+  let (smallest, biggest) = document.visiblePitchRange
+  let range = biggest - smallest
+  let noteHeight = height / CGFloat(range)
+  let start_x = CGFloat(event.start) / CGFloat(pitchesCount)
+  let end_x = CGFloat(event.end) / CGFloat(pitchesCount)
+  let mid_x = 0.5 * (start_x + end_x)
+  let noteWidth = width * (end_x - start_x)
+  let xpos = width * mid_x - 0.5 * noteWidth
+  let ypos = height * (1 - CGFloat(((event.avPitch + event.pitchShift)-smallest)/range)) - 0.5 * noteHeight
+  return .init(x: xpos, y: ypos, width: noteWidth, height: noteHeight)
 }
 
 //struct NotesView_Previews: PreviewProvider {

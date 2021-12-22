@@ -19,12 +19,10 @@ private enum RecorderState {
   }
 }
 
-private class RecorderConductor: ObservableObject {
+private class Conductor: ObservableObject {
   let engine = AudioEngine()
   var recorder: NodeRecorder?
   let player = AudioPlayer()
-  var silencer: Fader?
-  let mixer = Mixer()
 
   @Published var state = RecorderState() {
     didSet {
@@ -59,20 +57,28 @@ private class RecorderConductor: ObservableObject {
   }
 
   init() {
+    #if os(iOS)
+    do {
+        Settings.bufferLength = .short
+        try AVAudioSession.sharedInstance().setPreferredIOBufferDuration(Settings.bufferLength.duration)
+        try AVAudioSession.sharedInstance().setCategory(.playAndRecord,
+                                                        options: [.defaultToSpeaker, .mixWithOthers, .allowBluetoothA2DP])
+        try AVAudioSession.sharedInstance().setActive(true)
+    } catch let err {
+        print(err)
+    }
+    #endif
+
     guard let input = engine.input else {
       fatalError()
     }
-    
+
     do {
       recorder = try NodeRecorder(node: input)
     } catch let err {
       fatalError("\(err)")
     }
-    let silencer = Fader(input, gain: 0)
-    self.silencer = silencer
-    mixer.addInput(silencer)
-    mixer.addInput(player)
-    engine.output = mixer
+    engine.output = player
     NodeRecorder.removeTempFiles()
   }
 
@@ -90,7 +96,7 @@ private class RecorderConductor: ObservableObject {
 }
 
 struct RecorderView: View {
-  @StateObject private var conductor = RecorderConductor()
+  @StateObject private var conductor = Conductor()
 
   let onComplete: (URL?) -> Void
   var body: some View {

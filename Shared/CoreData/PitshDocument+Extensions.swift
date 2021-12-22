@@ -302,24 +302,22 @@ extension PitshDocument {
   }
   
   func performAutocorrelation(completionHandler: @escaping (Error?) -> ()) throws {
-    class AutocorError: LocalizedError {
-      private let message: String
-      init(_ message: String) {
-        self.message = message
-      }
-      var errorDescription: String? { return message }
-    }
-    
     guard let (floatData, sampleRate) = try audioFileURL?.readAudioFile() else {
-      completionHandler(AutocorError("Audio file url is nil"))
+      completionHandler(PitshError("Audio file url is nil"))
       return
     }
 
-    guard let pitchShifter = PitchShifter(sampleRate: Float(sampleRate)) else { completionHandler(AutocorError("Pitch shifter is nil")); return }
+    guard let pitchShifter = PitchShifter(sampleRate: Float(sampleRate)) else {
+      completionHandler(PitshError("Pitch shifter is nil"))
+      return
+    }
     pitchShifter.computePitchTrack(indata: floatData)
-    guard let frequencies = pitchShifter.pitchTrack, let powers = pitchShifter.powerTrack else { completionHandler(AutocorError("No pitch or power")); return }
+    guard let frequencies = pitchShifter.pitchTrack, let powers = pitchShifter.powerTrack else {
+      completionHandler(PitshError("No pitch or power"))
+      return
+    }
     let stepSize = pitchShifter.stepSize
-    
+
     // convert frequency to well-tempered logarithmic scale
     let pitches:[Float] = frequencies.map {
       if $0 > 0 {
@@ -328,29 +326,29 @@ extension PitshDocument {
         return $0
       }
     }
-    
+
     // normalise power
     let maxPower = max(abs(powers.max() ?? 0), abs(powers.min() ?? 0))
     let normalisedPowers = powers.map {$0 / maxPower}
-    
+
     let nd = NoteDetect()
     let minNoteDuration:Double = 0.2
     let minNoteFrames = Int(sampleRate / Double(stepSize) * minNoteDuration)
     let events = nd.process(pitchTrack: pitches, envelope: powers, minNoteFrames: minNoteFrames)
-    
+
     let kd = KeyDetector()
     let keys = kd.process(notes: events.map({(Int(round($0.avPitch + $0.pitchShift)), Double($0.end - $0.start) * Double($0.avPower))}))
     let bestKey = keys.first ?? (root: 0, major: true, score: 0)
     print(bestKey)
-    
+
     guard let moc = self.managedObjectContext else {
-      completionHandler(AutocorError("No managed object context"))
+      completionHandler(PitshError("No managed object context"))
       return
     }
 
     moc.perform {[weak self] in
       guard let self = self else {
-        completionHandler(AutocorError("No self"))
+        completionHandler(PitshError("No self"))
         return
       }
       self.audioSampleRate = sampleRate
@@ -364,17 +362,23 @@ extension PitshDocument {
       (self.relatedEvents as! Set<PitshEvent>).forEach({ moc.delete($0) })
       
       for e in events {
-        guard let PitshEvent = NSEntityDescription.insertNewObject(forEntityName: "PitshEvent", into: moc) as? PitshEvent else { print("failed to create PitshEvent object"); continue }
+        guard let PitshEvent = NSEntityDescription.insertNewObject(
+          forEntityName: "PitshEvent",
+          into: moc
+        ) as? PitshEvent else {
+          print("failed to create PitshEvent object")
+          continue
+        }
         PitshEvent.updateFrom(noteEvent: e)
         self.addToRelatedEvents(PitshEvent)
       }
-      
+
       let pitches = events.map({$0.avPitch})
       if let minPitch = pitches.min(), let maxPitch = pitches.max() {
         self.minimumVisiblePitch = minPitch - 12
         self.maximumVisiblePitch = maxPitch + 12
       }
-      
+
       do {
         if moc.hasChanges {
           try moc.save()
@@ -384,7 +388,7 @@ extension PitshDocument {
         completionHandler(error)
         return
       }
-      
+
       completionHandler(nil)
     }
   }

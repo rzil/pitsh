@@ -34,6 +34,7 @@ struct NotesView: View {
                     containerHeight: geometry.size.height
                   ) {
                     event.pitchShift += shift
+                    event.relatedDocument?.needsPitchShift = true
                   }
                 })
                 .onChanged { value in

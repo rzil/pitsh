@@ -9,6 +9,7 @@ import Foundation
 
 struct GlobalEnvironment {
   var coreData = CoreData()
+  var conductor = Conductor()
 }
 
 var Current = GlobalEnvironment()

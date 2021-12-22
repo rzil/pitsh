@@ -18,6 +18,8 @@
 		776378A02772A1D300C32125 /* NotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7763789E2772A1D300C32125 /* NotesView.swift */; };
 		776378A4277344A800C32125 /* PitshError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776378A3277344A800C32125 /* PitshError.swift */; };
 		776378A5277344A800C32125 /* PitshError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776378A3277344A800C32125 /* PitshError.swift */; };
+		776378A72773D5B200C32125 /* Conductor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776378A62773D5B200C32125 /* Conductor.swift */; };
+		776378A82773D5B200C32125 /* Conductor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776378A62773D5B200C32125 /* Conductor.swift */; };
 		778CEBAD276D638F00E6C53E /* RecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778CEBAC276D638F00E6C53E /* RecorderView.swift */; };
 		778CEBAE276D638F00E6C53E /* RecorderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778CEBAC276D638F00E6C53E /* RecorderView.swift */; };
 		778CEBB1276D930600E6C53E /* URL+AudioFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 778CEBB0276D930600E6C53E /* URL+AudioFile.swift */; };
@@ -85,6 +87,7 @@
 		7763789A27728D3500C32125 /* pitsh (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "pitsh (iOS).entitlements"; sourceTree = "<group>"; };
 		7763789E2772A1D300C32125 /* NotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesView.swift; sourceTree = "<group>"; };
 		776378A3277344A800C32125 /* PitshError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitshError.swift; sourceTree = "<group>"; };
+		776378A62773D5B200C32125 /* Conductor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Conductor.swift; sourceTree = "<group>"; };
 		778CEBAC276D638F00E6C53E /* RecorderView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecorderView.swift; sourceTree = "<group>"; };
 		778CEBB0276D930600E6C53E /* URL+AudioFile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "URL+AudioFile.swift"; sourceTree = "<group>"; };
 		778CEBB7276DA58B00E6C53E /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
@@ -187,6 +190,7 @@
 			children = (
 				778CEBC8276EB1D300E6C53E /* CoreData.swift */,
 				778CEBC4276EB19C00E6C53E /* GlobalEnvironment.swift */,
+				776378A62773D5B200C32125 /* Conductor.swift */,
 			);
 			path = Dependencies;
 			sourceTree = "<group>";
@@ -466,6 +470,7 @@
 				77C0D2DE26AA17A600670F6C /* ContentView.swift in Sources */,
 				77C0D2F826AA197A00670F6C /* NoteDetector.swift in Sources */,
 				778CEBCC276EB29600E6C53E /* Helpers.swift in Sources */,
+				776378A72773D5B200C32125 /* Conductor.swift in Sources */,
 				77C0D2DC26AA17A600670F6C /* pitshApp.swift in Sources */,
 				77C0D2F626AA197A00670F6C /* KeyDetector.swift in Sources */,
 				778CEBB8276DA58B00E6C53E /* Pitsh.xcdatamodeld in Sources */,
@@ -496,6 +501,7 @@
 				77C0D2DF26AA17A600670F6C /* ContentView.swift in Sources */,
 				77C0D2F926AA197A00670F6C /* NoteDetector.swift in Sources */,
 				778CEBCD276EB29600E6C53E /* Helpers.swift in Sources */,
+				776378A82773D5B200C32125 /* Conductor.swift in Sources */,
 				77C0D2DD26AA17A600670F6C /* pitshApp.swift in Sources */,
 				77C0D2F726AA197A00670F6C /* KeyDetector.swift in Sources */,
 				778CEBB9276DA58B00E6C53E /* Pitsh.xcdatamodeld in Sources */,

@@ -65,8 +65,28 @@ struct SongView: View {
           Text("Record")
         }
         Spacer()
-        Button(action: { shiftAudioAndPlay() }) {
+        Button(action: { playAudio() }) {
           Text("Play")
+        }
+        .contextMenu {
+          Button(action: {
+            documents.first?.autotuneEnabled = true
+            playAudio()
+          }) {
+            if documents.first?.autotuneEnabled == true {
+              Image(systemName: "checkmark")
+            }
+            Text("Tuned")
+          }
+          Button(action: {
+            documents.first?.autotuneEnabled = false
+            playAudio()
+          }) {
+            if documents.first?.autotuneEnabled == false {
+              Image(systemName: "checkmark")
+            }
+            Text("Original")
+          }
         }
         Spacer()
       }
@@ -126,6 +146,20 @@ struct SongView: View {
       }
     } else {
       Current.conductor.state = .playing(document.shiftedAudioFileURL)
+    }
+  }
+
+  private func playOriginal() {
+    guard let document = documents.first else { return }
+    Current.conductor.state = .playing(document.audioFileURL)
+  }
+
+  private func playAudio() {
+    guard let document = documents.first else { return }
+    if document.autotuneEnabled {
+      shiftAudioAndPlay()
+    } else {
+      playOriginal()
     }
   }
 }

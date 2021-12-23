@@ -89,6 +89,10 @@ struct SongView: View {
           }
         }
         Spacer()
+        Button(action: { stopAudio() }) {
+          Text("Stop")
+        }
+        Spacer()
       }
       Spacer()
     }
@@ -163,6 +167,10 @@ struct SongView: View {
     } else {
       playOriginal()
     }
+  }
+
+  private func stopAudio() {
+    Current.conductor.state = .stopped
   }
 }
 

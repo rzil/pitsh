@@ -118,8 +118,10 @@ struct SongView: View {
           print("*** tuning")
           do {
             try document.performAutocorrelation { error in
-              print("*** done tuning: \(error?.localizedDescription ?? "no errors")")
-              print("*** event count \(document.eventsSorted?.count ?? -1)")
+              print("*** done tuning")
+              if let error = error {
+                print(error)
+              }
             }
           } catch {
             print(error)

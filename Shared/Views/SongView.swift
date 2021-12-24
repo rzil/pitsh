@@ -105,6 +105,8 @@ struct SongView: View {
             Text("Stop")
           }
           Spacer()
+          Text(document.keyString)
+          Spacer()
         }
         Spacer()
       }

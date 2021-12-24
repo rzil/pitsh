@@ -6,8 +6,10 @@ struct RecorderView: View {
   let onComplete: (URL?) -> Void
   var body: some View {
     VStack {
-      Spacer()
-      Text(conductor.state.string)
+      Group {
+        Spacer()
+        Text(conductor.state.string)
+      }
       Spacer()
       Button(action: { conductor.state = .recording }) {
         Text("Record")
@@ -28,6 +30,7 @@ struct RecorderView: View {
         Text("Done")
       }
       .disabled(!conductor.state.isStopped)
+      Spacer()
     }
     .padding()
   }

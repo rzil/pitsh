@@ -278,6 +278,11 @@ extension PitshDocument {
     let range = biggest - smallest
     return containerHeight - CGFloat((pitch-smallest)/range)*containerHeight
   }
+
+  func convertTime(_ time: TimeInterval, containerWidth: CGFloat) -> CGFloat {
+    let position = time * audioSampleRate / Double(stepSize)
+    return convert(horizontal: CGFloat(position), containerWidth: containerWidth)
+  }
   
   func gridSpacing(containerHeight: CGFloat) -> CGFloat {
     let (smallest, biggest) = visiblePitchRange

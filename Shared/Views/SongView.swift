@@ -24,6 +24,7 @@ struct SongView: View {
 
   @State var isRecorderPresented = false
   @State var isProcessing = false
+  @StateObject private var conductor = Current.conductor
 
   private let secondsPerScreen: Double = 5
   private var scrollWidth: CGFloat {
@@ -39,72 +40,86 @@ struct SongView: View {
   }
 
   var body: some View {
-    VStack {
-      ZStack {
-        if documents.first?.pitches != nil {
-          ScrollView(.horizontal) {
-            ZStack {
-              WaveView()
-              NotesView()
+    if let document = documents.first {
+      VStack {
+        ZStack {
+          if document.pitches != nil {
+            ScrollView(.horizontal) {
+              ZStack {
+                WaveView()
+                NotesView()
+                GeometryReader { geometry in
+                  let width = geometry.size.width
+                  Rectangle()
+                    .foregroundColor(.gray)
+                    .frame(width: 1)
+                    .offset(x: conductor.state.isPlaying ? width : 0, y: 0)
+                    .animation(
+                      .linear(duration: conductor.state.isPlaying ? conductor.player.duration : 0),
+                      value: conductor.state.isPlaying)
+                }
+              }
+              .frame(width: scrollWidth)
             }
-            .frame(width: scrollWidth)
+            HStack {
+              NoteNamesView()
+                .frame(width: 32)
+                .clipped()
+              Spacer()
+            }
+          } else {
+            Text("Please record some audio")
           }
-          HStack {
-            NoteNamesView()
-              .frame(width: 32)
-              .clipped()
-            Spacer()
+        }
+        HStack {
+          Spacer()
+          Button(action: { isRecorderPresented = true }) {
+            Text("Record")
           }
-        } else {
-          Text("Please record some audio")
+          Spacer()
+          Button(action: { playAudio() }) {
+            Text("Play")
+          }
+          .contextMenu {
+            Button(action: {
+              documents.first?.autotuneEnabled = true
+              playAudio()
+            }) {
+              if documents.first?.autotuneEnabled == true {
+                Image(systemName: "checkmark")
+              }
+              Text("Tuned")
+            }
+            Button(action: {
+              documents.first?.autotuneEnabled = false
+              playAudio()
+            }) {
+              if documents.first?.autotuneEnabled == false {
+                Image(systemName: "checkmark")
+              }
+              Text("Original")
+            }
+          }
+          Spacer()
+          Button(action: { stopAudio() }) {
+            Text("Stop")
+          }
+          Spacer()
+        }
+        Spacer()
+      }
+      .navigationTitle("Pitsh")
+      .sheet(isPresented: $isRecorderPresented) {
+        RecorderView { url in
+          url.map(processAudio)
+          isRecorderPresented = false
         }
       }
-      HStack {
-        Spacer()
-        Button(action: { isRecorderPresented = true }) {
-          Text("Record")
-        }
-        Spacer()
-        Button(action: { playAudio() }) {
-          Text("Play")
-        }
-        .contextMenu {
-          Button(action: {
-            documents.first?.autotuneEnabled = true
-            playAudio()
-          }) {
-            if documents.first?.autotuneEnabled == true {
-              Image(systemName: "checkmark")
-            }
-            Text("Tuned")
-          }
-          Button(action: {
-            documents.first?.autotuneEnabled = false
-            playAudio()
-          }) {
-            if documents.first?.autotuneEnabled == false {
-              Image(systemName: "checkmark")
-            }
-            Text("Original")
-          }
-        }
-        Spacer()
-        Button(action: { stopAudio() }) {
-          Text("Stop")
-        }
-        Spacer()
+      .sheet(isPresented: $isProcessing) {
+        ProgressView()
       }
-      Spacer()
-    }
-    .navigationTitle("Pitsh")
-    .sheet(isPresented: $isRecorderPresented) {
-      RecorderView { url in
-        url.map(processAudio)
-        isRecorderPresented = false
-      }
-    }
-    .sheet(isPresented: $isProcessing) {
-      ProgressView()
+    } else {
+      Text("No document error")
     }
   }
 
@@ -147,17 +162,17 @@ struct SongView: View {
         if let error = $0 {
           print(error)
         } else {
-          Current.conductor.state = .playing(document.shiftedAudioFileURL)
+          conductor.state = .playing(document.shiftedAudioFileURL)
         }
       }
     } else {
-      Current.conductor.state = .playing(document.shiftedAudioFileURL)
+      conductor.state = .playing(document.shiftedAudioFileURL)
     }
   }
 
   private func playOriginal() {
     guard let document = documents.first else { return }
-    Current.conductor.state = .playing(document.audioFileURL)
+    conductor.state = .playing(document.audioFileURL)
   }
 
   private func playAudio() {
@@ -170,7 +185,7 @@ struct SongView: View {
   }
 
   private func stopAudio() {
-    Current.conductor.state = .stopped
+    conductor.state = .stopped
   }
 }
 

@@ -30,6 +30,12 @@ enum RecorderState {
     }
     return false
   }
+  var isPlaying: Bool {
+    if case .playing = self {
+      return true
+    }
+    return false
+  }
 }
 
 class Conductor: ObservableObject {

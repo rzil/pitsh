@@ -162,7 +162,9 @@ struct SongView: View {
         if let error = $0 {
           print(error)
         } else {
-          conductor.state = .playing(document.shiftedAudioFileURL)
+          DispatchQueue.main.async {
+            conductor.state = .playing(document.shiftedAudioFileURL)
+          }
         }
       }
     } else {

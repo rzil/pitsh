@@ -8,9 +8,14 @@
 import SwiftUI
 
 struct KeysView: View {
-    var body: some View {
-        Text("Hello, World!")
+  @Environment(\.presentationMode) var presentationMode
+
+  var body: some View {
+    Text("Hello, World!")
+    Button("Dismiss Me") {
+        presentationMode.wrappedValue.dismiss()
     }
+  }
 }
 
 //struct KeysView_Previews: PreviewProvider {

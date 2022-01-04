@@ -22,6 +22,7 @@ struct SongView: View {
     ]
   ) var events: FetchedResults<PitshEvent>
 
+  @State var isKeysPresented = false
   @State var isRecorderPresented = false
   @State var isProcessing = false
   @StateObject private var conductor = Current.conductor
@@ -105,7 +106,9 @@ struct SongView: View {
             Text("Stop")
           }
           Spacer()
-          Text(document.keyString)
+          Button(action: { isKeysPresented = true }) {
+            Text(document.keyString)
+          }
           Spacer()
         }
         Spacer()
@@ -119,6 +122,9 @@ struct SongView: View {
       }
       .sheet(isPresented: $isProcessing) {
         ProgressView()
+      }
+      .sheet(isPresented: $isKeysPresented) {
+        KeysView()
       }
     } else {
       Text("No document error")

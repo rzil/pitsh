@@ -2,7 +2,7 @@ import SwiftUI
 
 struct RecorderView: View {
   @StateObject private var conductor = Current.conductor
-
+  
   let onComplete: (URL?) -> Void
   var body: some View {
     VStack {
@@ -26,12 +26,26 @@ struct RecorderView: View {
       }
       .disabled(conductor.state.isStopped)
       Spacer()
-      Button(action: { onComplete(conductor.recorder?.audioFile?.url) }) {
+      Button(action: {
+        if let recordedDuration = conductor.recorder?.recordedDuration,
+           recordedDuration > 0 {
+          onComplete(conductor.recorder?.audioFile?.url)
+        } else {
+          onComplete(nil)
+        }
+      }) {
         Text("Done")
       }
       .disabled(!conductor.state.isStopped)
       Spacer()
     }
     .padding()
+    .onAppear(perform: {
+      do {
+        try conductor.recorder?.reset()
+      } catch {
+        print(error)
+      }
+    })
   }
 }

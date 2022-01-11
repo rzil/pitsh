@@ -40,7 +40,7 @@ enum RecorderState {
 
 class Conductor: ObservableObject {
   let engine = AudioEngine()
-  var recorder: NodeRecorder?
+  private(set) var recorder: NodeRecorder?
   let player = AudioPlayer()
 
   @Published var state = RecorderState() {

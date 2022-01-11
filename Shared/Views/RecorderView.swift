@@ -40,12 +40,15 @@ struct RecorderView: View {
       Spacer()
     }
     .padding()
-    .onAppear(perform: {
+    .onAppear {
       do {
         try conductor.recorder?.reset()
       } catch {
         print(error)
       }
-    })
+    }
+    .onDisappear {
+      conductor.state = .stopped
+    }
   }
 }

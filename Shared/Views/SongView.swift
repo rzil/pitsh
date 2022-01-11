@@ -26,6 +26,7 @@ struct SongView: View {
   @State var isRecorderPresented = false
   @State var isProcessing = false
   @StateObject private var conductor = Current.conductor
+  @State var isError = false
 
   private let secondsPerScreen: Double = 5
   private var scrollWidth: CGFloat {
@@ -126,6 +127,12 @@ struct SongView: View {
       .sheet(isPresented: $isKeysPresented) {
         KeysView()
       }
+      .sheet(isPresented: $isError) {
+        Text("Something went wrong.")
+        Button("OK") {
+          isError = false
+        }
+      }
     } else {
       Text("No document error")
     }
@@ -148,14 +155,17 @@ struct SongView: View {
               print("*** done tuning")
               if let error = error {
                 print(error)
+                self.isError = true
               }
             }
           } catch {
             print(error)
+            self.isError = true
           }
         }
       } catch {
         print(error)
+        self.isError = true
       }
       self.isProcessing = false
     }
@@ -169,6 +179,7 @@ struct SongView: View {
         isProcessing = false
         if let error = $0 {
           print(error)
+          self.isError = true
         } else {
           DispatchQueue.main.async {
             conductor.state = .playing(document.shiftedAudioFileURL)

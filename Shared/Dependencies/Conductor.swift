@@ -31,7 +31,7 @@ enum RecorderState {
     return false
   }
   var isPlaying: Bool {
-    if case .playing = self {
+    if case let .playing(url) = self, url != nil {
       return true
     }
     return false

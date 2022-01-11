@@ -10,33 +10,46 @@ struct RecorderView: View {
         Spacer()
         Text(conductor.state.string)
       }
-      Spacer()
-      Button(action: { conductor.state = .recording }) {
-        Text("Record")
+      Group {
+        Spacer()
+        Button(action: { conductor.state = .recording }) {
+          Text("Record")
+        }
+        .disabled(!conductor.state.isStopped)
       }
-      .disabled(!conductor.state.isStopped)
-      Spacer()
-      Button(action: { conductor.state = .playing(nil) }) {
-        Text("Play")
+      Group {
+        Spacer()
+        Button(action: { conductor.state = .playing(nil) }) {
+          Text("Play")
+        }
+        .disabled(!conductor.state.isStopped)
       }
-      .disabled(!conductor.state.isStopped)
       Spacer()
       Button(action: { conductor.state = .stopped }) {
         Text("Stop")
       }
       .disabled(conductor.state.isStopped)
       Spacer()
-      Button(action: {
-        if let recordedDuration = conductor.recorder?.recordedDuration,
-           recordedDuration > 0 {
-          onComplete(conductor.recorder?.audioFile?.url)
-        } else {
-          onComplete(nil)
+      HStack {
+        Spacer()
+        Button(action: { onComplete(nil) }) {
+          Text("Cancel")
         }
-      }) {
-        Text("Done")
+        .disabled(!conductor.state.isStopped)
+        Spacer()
+        Button(action: {
+          if let recordedDuration = conductor.recorder?.recordedDuration,
+             recordedDuration > 0 {
+            onComplete(conductor.recorder?.audioFile?.url)
+          } else {
+            onComplete(nil)
+          }
+        }) {
+          Text("Done")
+        }
+        .disabled(!conductor.state.isStopped)
+        Spacer()
       }
-      .disabled(!conductor.state.isStopped)
       Spacer()
     }
     .padding()

@@ -199,8 +199,8 @@ struct SongView: View {
     if document.needsPitchShift {
       isProcessing = true
       DispatchQueue.global(qos: .background).async {
-        DispatchQueue.main.async {
-          performAudioShift(shouldContinue: shouldContinue, document: document) { result in
+        performAudioShift(shouldContinue: shouldContinue, document: document) { result in
+          DispatchQueue.main.async {
             isProcessing = false
             switch result {
             case .success(let finished):

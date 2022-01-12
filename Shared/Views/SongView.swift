@@ -7,6 +7,13 @@
 
 import SwiftUI
 
+// This class is used to pass a flag into
+// background threads. This can be used to
+// end the task running on the thread.
+class ShouldContinue {
+  var value: Bool = false
+}
+
 struct SongView: View {
   @Environment(\.managedObjectContext) var managedObjectContext
 
@@ -27,6 +34,7 @@ struct SongView: View {
   @State var isProcessing = false
   @StateObject private var conductor = Current.conductor
   @State var isError = false
+  private var shouldContinue = ShouldContinue()
 
   private let secondsPerScreen: Double = 5
   private var scrollWidth: CGFloat {
@@ -133,6 +141,9 @@ struct SongView: View {
           isError = false
         }
       }
+      .onChange(of: isProcessing) { newValue in
+        shouldContinue.value = newValue
+      }
     } else {
       Text("No document error")
     }
@@ -142,30 +153,34 @@ struct SongView: View {
     guard let document = documents.first else { return }
     isProcessing = true
     DispatchQueue.global(qos: .background).async {
-      do {
-        if let destinationURL = document.audioFileURL {
-          let fileManager = FileManager.default
-          if fileManager.fileExists(atPath: destinationURL.path) {
-            try FileManager.default.removeItem(at: destinationURL)
-          }
-          try FileManager.default.moveItem(at: url, to: destinationURL)
-          print("*** tuning")
-          do {
-            try document.performAutocorrelation { error in
-              print("*** done tuning")
-              if let error = error {
-                print(error)
-                self.isError = true
+      if let destinationURL = document.audioFileURL {
+        print("*** tuning")
+        do {
+          try document.performAutocorrelation(shouldContinue: shouldContinue, audioFileURL: url) { result in
+            print("*** done tuning")
+            switch result {
+            case .success(let finished):
+              if finished {
+                do {
+                  let fileManager = FileManager.default
+                  if fileManager.fileExists(atPath: destinationURL.path) {
+                    try FileManager.default.removeItem(at: destinationURL)
+                  }
+                  try FileManager.default.moveItem(at: url, to: destinationURL)
+                } catch {
+                  print(error)
+                  self.isError = true
+                }
               }
+            case .failure(let error):
+              print(error)
+              self.isError = true
             }
-          } catch {
-            print(error)
-            self.isError = true
           }
+        } catch {
+          print(error)
+          self.isError = true
         }
-      } catch {
-        print(error)
-        self.isError = true
       }
       self.isProcessing = false
     }
@@ -175,14 +190,19 @@ struct SongView: View {
     guard let document = documents.first else { return }
     if document.needsPitchShift {
       isProcessing = true
-      performAudioShift(document: document) {
-        isProcessing = false
-        if let error = $0 {
-          print(error)
-          self.isError = true
-        } else {
-          DispatchQueue.main.async {
-            conductor.state = .playing(document.shiftedAudioFileURL)
+      DispatchQueue.global(qos: .background).async {
+        DispatchQueue.main.async {
+          performAudioShift(shouldContinue: shouldContinue, document: document) { result in
+            isProcessing = false
+            switch result {
+            case .success(let finished):
+              if finished {
+                conductor.state = .playing(document.shiftedAudioFileURL)
+              }
+            case .failure(let error):
+              print(error)
+              self.isError = true
+            }
           }
         }
       }
@@ -210,42 +230,41 @@ struct SongView: View {
   }
 }
 
-private func performAudioShift(document: PitshDocument, completion: @escaping (Error?) -> ()) {
+private func performAudioShift(shouldContinue: ShouldContinue, document: PitshDocument, completion: @escaping (Result<Bool,Error>) -> ()) {
   guard let audioURL = document.audioFileURL,
         let shiftedAudioURL = document.shiftedAudioFileURL,
         let eventsSorted = document.eventsSorted
   else {
-    completion(PitshError("Document missing parameters"))
+    completion(.failure(PitshError("Document missing parameters")))
     return
   }
-  DispatchQueue.global(qos: .background).async {
-    do {
-      let (floatData, sampleRate) = try audioURL.readAudioFile()
-      guard let pitchShifter = PitchShifter(sampleRate: Float(sampleRate))
-      else {
-        completion(PitshError("Failed to create pitch shifter"))
-        return
+  do {
+    let (floatData, sampleRate) = try audioURL.readAudioFile()
+    guard let pitchShifter = PitchShifter(sampleRate: Float(sampleRate))
+    else {
+      completion(.failure(PitshError("Failed to create pitch shifter")))
+      return
+    }
+    print("*** pitch shifting")
+    pitchShifter.pitchTrack = document.frequencies
+    pitchShifter.powerTrack = document.powers
+    pitchShifter.finalPitchTrack = pitchShifter.pitchTrack
+    for ev in eventsSorted {
+      let start = Int(ev.start)
+      let end = Int(ev.end)
+      let f = pow(2, (ev.effectivePitch + 3) / 12) * 55
+      for i in start ..< end {
+        pitchShifter.finalPitchTrack?[i] = f
       }
-      print("*** pitch shifting")
-      pitchShifter.pitchTrack = document.frequencies
-      pitchShifter.powerTrack = document.powers
-      pitchShifter.finalPitchTrack = pitchShifter.pitchTrack
-      for ev in eventsSorted {
-        let start = Int(ev.start)
-        let end = Int(ev.end)
-        let f = pow(2, (ev.effectivePitch + 3) / 12) * 55
-        for i in start ..< end {
-          pitchShifter.finalPitchTrack?[i] = f
-        }
-      }
-      let shiftedAudio = pitchShifter.process(pitchShift: 1, indata: floatData)
-      print("*** done with pitch shift")
+    }
+    if let shiftedAudio = pitchShifter.process(shouldContinue: &shouldContinue.value, pitchShift: 1, indata: floatData) {
       try shiftedAudioURL.writeAudioFile(shiftedAudio, sampleRate: sampleRate)
       document.needsPitchShift = false
-      completion(nil)
-    } catch {
-      completion(error)
+      completion(.success(true))
     }
+    completion(.success(false))
+  } catch {
+    completion(.failure(error))
   }
 }
 

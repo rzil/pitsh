@@ -88,7 +88,7 @@ class PitchShifter {
     vDSP_vsmul(input, 1, &_B, &output, 1, length)
   }
   
-  func computePitchTrack(indata:[Float]) {
+  func computePitchTrack(shouldContinue: inout Bool, indata:[Float]) -> Bool {
     var inFIFO = Array<Float>(repeating: 0, count: Int(fftFrameSize))
     let outFIFO = Array<Float>(repeating: 0, count: Int(fftFrameSize))
     var rover: Int = 0
@@ -111,6 +111,7 @@ class PitchShifter {
     
     /* main processing loop */
     for i in 0 ..< numSampsToProcess {
+      guard shouldContinue else { return false }
       
       /* As long as we have not yet collected enough data just read in */
       inFIFO[rover] = indata[i]
@@ -135,9 +136,10 @@ class PitchShifter {
     self.powerTrack = powerTrack
     //        self.finalPitchTrack = Array(repeating: 440, count: pitchTrackIndex)
     //        self.finalPitchTrack = pitchTrack
+    return true
   }
   
-  func process(pitchShift:Float? = nil, indata:[Float]) -> [Float] {
+  func process(shouldContinue: inout Bool, pitchShift:Float? = nil, indata:[Float]) -> [Float]? {
     var inFIFO = Array<Float>(repeating: 0, count: Int(fftFrameSize))
     var outFIFO = Array<Float>(repeating: 0, count: Int(fftFrameSize))
     var lastPhase = Array<Float>(repeating: 0, count: Int(fftFrameSizeOver2 + 1))
@@ -172,6 +174,7 @@ class PitchShifter {
     
     /* main processing loop */
     for i in 0 ..< numSampsToProcess {
+      guard shouldContinue else { return nil }
       
       /* As long as we have not yet collected enough data just read in */
       inFIFO[rover] = indata[i]

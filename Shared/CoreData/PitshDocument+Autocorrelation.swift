@@ -10,7 +10,7 @@ import Foundation
 
 extension PitshDocument {
   func performAutocorrelation(
-    shouldContinue: ShouldContinue,
+    shouldContinue: inout Bool,
     audioFileURL: URL,
     completionHandler: @escaping (Result<Bool,Error>) -> ()) {
     do {
@@ -19,7 +19,7 @@ extension PitshDocument {
         completionHandler(.failure(PitshError("Pitch shifter is nil")))
         return
       }
-      let finishedShifting = pitchShifter.computePitchTrack(shouldContinue: &shouldContinue.value, indata: floatData)
+      let finishedShifting = pitchShifter.computePitchTrack(shouldContinue: &shouldContinue, indata: floatData)
       guard finishedShifting else {
         completionHandler(.success(false))
         return

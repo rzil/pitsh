@@ -7,14 +7,15 @@
 
 import SwiftUI
 
-// This class is used to pass a flag into
-// background threads. This can be used to
-// end the task running on the thread.
-class ShouldContinue {
-  var value: Bool = false
-}
-
 struct SongView: View {
+
+  // This class is used to pass a flag into
+  // background threads. This can be used to
+  // end the task running on the thread.
+  private class ShouldContinue {
+    var value: Bool = false
+  }
+
   @Environment(\.managedObjectContext) var managedObjectContext
 
   @FetchRequest(
@@ -162,7 +163,7 @@ struct SongView: View {
           let destinationURL = document.audioFileURL else { return }
     isProcessing = true
     DispatchQueue.global(qos: .background).async {
-      document.performAutocorrelation(shouldContinue: shouldContinue, audioFileURL: url) { result in
+      document.performAutocorrelation(shouldContinue: &shouldContinue.value, audioFileURL: url) { result in
         DispatchQueue.main.async {
           switch result {
           case .success(let finished):
@@ -193,7 +194,7 @@ struct SongView: View {
     if document.needsPitchShift {
       isProcessing = true
       DispatchQueue.global(qos: .background).async {
-        performAudioShift(shouldContinue: shouldContinue, document: document) { result in
+        performAudioShift(shouldContinue: &shouldContinue.value, document: document) { result in
           DispatchQueue.main.async {
             isProcessing = false
             switch result {
@@ -232,7 +233,10 @@ struct SongView: View {
   }
 }
 
-private func performAudioShift(shouldContinue: ShouldContinue, document: PitshDocument, completion: @escaping (Result<Bool,Error>) -> ()) {
+private func performAudioShift(
+  shouldContinue: inout Bool,
+  document: PitshDocument,
+  completion: @escaping (Result<Bool,Error>) -> ()) {
   guard let audioURL = document.audioFileURL,
         let shiftedAudioURL = document.shiftedAudioFileURL,
         let eventsSorted = document.eventsSorted
@@ -258,7 +262,7 @@ private func performAudioShift(shouldContinue: ShouldContinue, document: PitshDo
         pitchShifter.finalPitchTrack?[i] = f
       }
     }
-    if let shiftedAudio = pitchShifter.process(shouldContinue: &shouldContinue.value, pitchShift: 1, indata: floatData) {
+    if let shiftedAudio = pitchShifter.process(shouldContinue: &shouldContinue, pitchShift: 1, indata: floatData) {
       try shiftedAudioURL.writeAudioFile(shiftedAudio, sampleRate: sampleRate)
       document.needsPitchShift = false
       completion(.success(true))

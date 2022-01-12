@@ -130,7 +130,15 @@ struct SongView: View {
         }
       }
       .sheet(isPresented: $isProcessing) {
-        ProgressView()
+        VStack {
+          Spacer()
+          ProgressView()
+          Spacer()
+          Button("Cancel") {
+            isProcessing = false
+          }
+          Spacer()
+        }
       }
       .sheet(isPresented: $isKeysPresented) {
         KeysView()

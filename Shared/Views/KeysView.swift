@@ -8,12 +8,12 @@
 import SwiftUI
 
 struct KeysView: View {
-  @Environment(\.presentationMode) var presentationMode
+  @Environment(\.dismiss) var dismiss
 
   var body: some View {
     Text("Hello, World!")
     Button("Dismiss Me") {
-        presentationMode.wrappedValue.dismiss()
+        dismiss()
     }
   }
 }

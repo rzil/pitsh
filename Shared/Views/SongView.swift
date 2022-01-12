@@ -163,31 +163,26 @@ struct SongView: View {
     DispatchQueue.global(qos: .background).async {
       if let destinationURL = document.audioFileURL {
         print("*** tuning")
-        do {
-          try document.performAutocorrelation(shouldContinue: shouldContinue, audioFileURL: url) { result in
-            print("*** done tuning")
-            switch result {
-            case .success(let finished):
-              if finished {
-                do {
-                  let fileManager = FileManager.default
-                  if fileManager.fileExists(atPath: destinationURL.path) {
-                    try FileManager.default.removeItem(at: destinationURL)
-                  }
-                  try FileManager.default.moveItem(at: url, to: destinationURL)
-                } catch {
-                  print(error)
-                  self.isError = true
+        document.performAutocorrelation(shouldContinue: shouldContinue, audioFileURL: url) { result in
+          print("*** done tuning")
+          switch result {
+          case .success(let finished):
+            if finished {
+              do {
+                let fileManager = FileManager.default
+                if fileManager.fileExists(atPath: destinationURL.path) {
+                  try FileManager.default.removeItem(at: destinationURL)
                 }
+                try FileManager.default.moveItem(at: url, to: destinationURL)
+              } catch {
+                print(error)
+                self.isError = true
               }
-            case .failure(let error):
-              print(error)
-              self.isError = true
             }
+          case .failure(let error):
+            print(error)
+            self.isError = true
           }
-        } catch {
-          print(error)
-          self.isError = true
         }
       }
       self.isProcessing = false

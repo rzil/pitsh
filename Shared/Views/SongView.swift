@@ -158,13 +158,12 @@ struct SongView: View {
   }
 
   private func processAudio(_ url: URL) {
-    guard let document = documents.first else { return }
+    guard let document = documents.first,
+          let destinationURL = document.audioFileURL else { return }
     isProcessing = true
     DispatchQueue.global(qos: .background).async {
-      if let destinationURL = document.audioFileURL {
-        print("*** tuning")
-        document.performAutocorrelation(shouldContinue: shouldContinue, audioFileURL: url) { result in
-          print("*** done tuning")
+      document.performAutocorrelation(shouldContinue: shouldContinue, audioFileURL: url) { result in
+        DispatchQueue.main.async {
           switch result {
           case .success(let finished):
             if finished {
@@ -183,9 +182,9 @@ struct SongView: View {
             print(error)
             self.isError = true
           }
+          self.isProcessing = false
         }
       }
-      self.isProcessing = false
     }
   }
 
@@ -248,7 +247,6 @@ private func performAudioShift(shouldContinue: ShouldContinue, document: PitshDo
       completion(.failure(PitshError("Failed to create pitch shifter")))
       return
     }
-    print("*** pitch shifting")
     pitchShifter.pitchTrack = document.frequencies
     pitchShifter.powerTrack = document.powers
     pitchShifter.finalPitchTrack = pitchShifter.pitchTrack

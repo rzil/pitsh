@@ -81,11 +81,13 @@ struct SongView: View {
             Button(action: { isRecorderPresented = true }) {
               Text("Record")
             }
+            .disabled(!conductor.state.isStopped)
             Spacer()
           }
           Button(action: { playAudio() }) {
             Text("Play")
           }
+          .disabled(!conductor.state.isStopped)
           .contextMenu {
             Button(action: {
               documents.first?.autotuneEnabled = true
@@ -112,14 +114,17 @@ struct SongView: View {
           Button(action: { stopAudio() }) {
             Text("Stop")
           }
+          .disabled(conductor.state.isStopped)
           Spacer()
           Button(action: { isKeysPresented = true }) {
             Text(document.keyString)
           }
+          .disabled(!conductor.state.isStopped)
           Spacer()
           Button(action: { snapToKey(document) }) {
             Text("Snap")
           }
+          .disabled(!conductor.state.isStopped)
           Spacer()
         }
         Spacer()

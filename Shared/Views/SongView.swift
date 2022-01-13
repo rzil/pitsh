@@ -142,7 +142,7 @@ struct SongView: View {
         }
       }
       .sheet(isPresented: $isKeysPresented) {
-        KeysView()
+        KeysView(document)
       }
       .sheet(isPresented: $isError) {
         Text("Something went wrong.")

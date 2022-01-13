@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum KeySignature: String, CaseIterable, Identifiable {
+private enum KeySignature: String, CaseIterable, Identifiable {
   case cMajor   = "C Major"
   case dbMajor  = "D♭ Major"
   case dMajor   = "D Major"
@@ -38,15 +38,18 @@ enum KeySignature: String, CaseIterable, Identifiable {
 }
 
 struct KeysView: View {
+  init(_ document: PitshDocument) {
+    self.document = document
+    let keyPair = document.keyPair
+    let selectedKey = KeySignature.allCases[keyPair.root + (keyPair.major ? 0 : 12)]
+    self._selectedKey = .init(initialValue: selectedKey)
+  }
+
   @Environment(\.dismiss) var dismiss
-  
-  @FetchRequest(
-    entity: PitshDocument.entity(),
-    sortDescriptors: []
-  ) var documents: FetchedResults<PitshDocument>
-  
+  private let document: PitshDocument
+
   private var rankedKeys: [KeySignature] {
-    guard let eventsSorted = documents.first?.eventsSorted else { return [] }
+    guard let eventsSorted = document.eventsSorted else { return [] }
     let kd = KeyDetector()
     let keys = kd.process(notes: eventsSorted.map({(Int(round($0.avPitch + $0.pitchShift)), Double($0.end - $0.start) * Double($0.avPower))}))
     return keys
@@ -54,7 +57,7 @@ struct KeysView: View {
       .map({KeySignature.allCases[$0.root + ($0.major ? 0 : 12)]})
   }
 
-  @State private var selectedKey = KeySignature.cMajor
+  @State private var selectedKey: KeySignature
 
   var body: some View {
     Picker("Key", selection: $selectedKey) {

@@ -7,34 +7,64 @@
 
 import SwiftUI
 
-private enum KeySignature: String, CaseIterable, Identifiable {
-  case cMajor   = "C Major"
-  case dbMajor  = "D♭ Major"
-  case dMajor   = "D Major"
-  case ebMajor  = "E♭ Major"
-  case eMajor   = "E Major"
-  case fMajor   = "F Major"
-  case fsMajor  = "F♯ Major"
-  case gMajor   = "G Major"
-  case gsMajor  = "G♯ Major"
-  case aMajor   = "A Major"
-  case bbMajor  = "B♭ Major"
-  case bMajor   = "B Major"
+private enum KeySignature: Int, CaseIterable, Identifiable {
+  case cMajor
+  case dbMajor
+  case dMajor
+  case ebMajor
+  case eMajor
+  case fMajor
+  case fsMajor
+  case gMajor
+  case gsMajor
+  case aMajor
+  case bbMajor
+  case bMajor
 
-  case cminor   = "C minor"
-  case dbminor  = "D♭ minor"
-  case dminor   = "D minor"
-  case ebminor  = "E♭ minor"
-  case eminor   = "E minor"
-  case fminor   = "F minor"
-  case fsminor  = "F♯ minor"
-  case gminor   = "G minor"
-  case abminor  = "A♭ minor"
-  case aminor   = "A minor"
-  case bbminor  = "B♭ minor"
-  case bminor   = "B minor"
+  case cminor
+  case dbminor
+  case dminor
+  case ebminor
+  case eminor
+  case fminor
+  case fsminor
+  case gminor
+  case abminor
+  case aminor
+  case bbminor
+  case bminor
 
-  var id: String { self.rawValue }
+  var name: String {
+    switch self {
+    case .cMajor:   return "C Major"
+    case .dbMajor:  return "D♭ Major"
+    case .dMajor:   return "D Major"
+    case .ebMajor:  return "E♭ Major"
+    case .eMajor:   return "E Major"
+    case .fMajor:   return "F Major"
+    case .fsMajor:  return "F♯ Major"
+    case .gMajor:   return "G Major"
+    case .gsMajor:  return "G♯ Major"
+    case .aMajor:   return "A Major"
+    case .bbMajor:  return "B♭ Major"
+    case .bMajor:   return "B Major"
+      
+    case .cminor:   return "C minor"
+    case .dbminor:  return "D♭ minor"
+    case .dminor:   return "D minor"
+    case .ebminor:  return "E♭ minor"
+    case .eminor:   return "E minor"
+    case .fminor:   return "F minor"
+    case .fsminor:  return "F♯ minor"
+    case .gminor:   return "G minor"
+    case .abminor:  return "A♭ minor"
+    case .aminor:   return "A minor"
+    case .bbminor:  return "B♭ minor"
+    case .bminor:   return "B minor"
+    }
+  }
+
+  var id: Int { self.rawValue }
 }
 
 struct KeysView: View {
@@ -62,14 +92,23 @@ struct KeysView: View {
   var body: some View {
     Picker("Key", selection: $selectedKey) {
       ForEach(rankedKeys) { key in
-        Text(key.rawValue).tag(key)
+        Text(key.name).tag(key)
       }
     }
     .pickerStyle(InlinePickerStyle())
-    Text("Selected key: \(selectedKey.rawValue)")
+    Text("Selected key: \(selectedKey.name)")
 
-    Button("Done") {
-      dismiss()
+    HStack {
+      Spacer()
+      Button("Cancel") {
+        dismiss()
+      }
+      Spacer()
+      Button("Done") {
+        document.key = Int16(selectedKey.rawValue)
+        dismiss()
+      }
+      Spacer()
     }
   }
 }

@@ -8,21 +8,16 @@
 import SwiftUI
 
 struct NoteNamesView: View {
-  @FetchRequest(
-    entity: PitshDocument.entity(),
-    sortDescriptors: []
-  ) var documents: FetchedResults<PitshDocument>
+  let document: PitshDocument
   
   var body: some View {
     GeometryReader { geometry in
-      if let document = self.documents.first {
-        ForEach(noteNames(height: geometry.size.height, document: document)) { x in
-          Text(x.name)
-            .foregroundColor(.black)
-            .font(.caption)
-            .offset(x: 8, y: x.minY)
-            .frame(height: x.height, alignment: .center)
-        }
+      ForEach(noteNames(height: geometry.size.height, document: document)) { x in
+        Text(x.name)
+          .foregroundColor(.black)
+          .font(.caption)
+          .offset(x: 8, y: x.minY)
+          .frame(height: x.height, alignment: .center)
       }
     }
   }

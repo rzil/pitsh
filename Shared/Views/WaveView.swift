@@ -11,29 +11,24 @@ private let gridColor1 = Color(red: 0.8, green: 0.8, blue: 1, opacity: 1)
 private let gridColor2 = Color(red: 0.9, green: 0.9, blue: 1, opacity: 1)
 
 struct WaveView: View {
-  @FetchRequest(
-    entity: PitshDocument.entity(),
-    sortDescriptors: []
-  ) var documents: FetchedResults<PitshDocument>
+  let document: PitshDocument
 
   var body: some View {
     GeometryReader { geometry in
-      if let document = self.documents.first {
-        // draw grid
-        let rects = grid(width: geometry.size.width, height: geometry.size.height, document: document)
-        ForEach(rects) { r in
-          Rectangle()
-              .fill(gridColor2)
-              .offset(x: r.rect.minX, y: r.rect.minY)
-              .frame(width: r.rect.width, height: r.rect.height)
-        }
-
-        // draw audio
-        let paths = strokes(width: geometry.size.width, height: geometry.size.height, document: document)
-        ForEach(paths) { strokePath in
-          strokePath.path
-            .stroke(Color.red, lineWidth: 1.5)
-        }
+      // draw grid
+      let rects = grid(width: geometry.size.width, height: geometry.size.height, document: document)
+      ForEach(rects) { r in
+        Rectangle()
+          .fill(gridColor2)
+          .offset(x: r.rect.minX, y: r.rect.minY)
+          .frame(width: r.rect.width, height: r.rect.height)
+      }
+      
+      // draw audio
+      let paths = strokes(width: geometry.size.width, height: geometry.size.height, document: document)
+      ForEach(paths) { strokePath in
+        strokePath.path
+          .stroke(Color.red, lineWidth: 1.5)
       }
     }
     .background(gridColor1)

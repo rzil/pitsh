@@ -23,13 +23,6 @@ struct SongView: View {
     sortDescriptors: []
   ) var documents: FetchedResults<PitshDocument>
 
-  @FetchRequest(
-    entity: PitshEvent.entity(),
-    sortDescriptors: [
-      NSSortDescriptor(keyPath: \PitshEvent.start, ascending: true)
-    ]
-  ) var events: FetchedResults<PitshEvent>
-
   @State var isKeysPresented = false
   @State var isRecorderPresented = false
   @State var isProcessing = false
@@ -57,7 +50,7 @@ struct SongView: View {
           if document.pitches != nil {
             ScrollView(.horizontal) {
               ZStack {
-                WaveView()
+                WaveView(document: document)
                 NotesView()
                 GeometryReader { geometry in
                   let width = geometry.size.width
@@ -73,7 +66,7 @@ struct SongView: View {
               .frame(width: scrollWidth)
             }
             HStack {
-              NoteNamesView()
+              NoteNamesView(document: document)
                 .frame(width: 32)
                 .clipped()
               Spacer()

@@ -265,8 +265,9 @@ private func performAudioShift(
       try shiftedAudioURL.writeAudioFile(shiftedAudio, sampleRate: sampleRate)
       document.needsPitchShift = false
       completion(.success(true))
+    } else {
+      completion(.success(false))
     }
-    completion(.success(false))
   } catch {
     completion(.failure(error))
   }

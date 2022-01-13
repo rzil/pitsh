@@ -40,4 +40,14 @@ final class CoreDataContainer: NSPersistentContainer, ObservableObject {
       print("*** loaded persistent stores")
     }
   }
+
+  func saveContext() {
+    do {
+      if viewContext.hasChanges {
+        try viewContext.save()
+      }
+    } catch {
+      print(error)
+    }
+  }
 }

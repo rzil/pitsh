@@ -89,6 +89,7 @@ struct SongView: View {
           .contextMenu {
             Button(action: {
               documents.first?.autotuneEnabled = true
+              Current.coreData.persistentContainer().saveContext()
               playAudio()
             }) {
               if documents.first?.autotuneEnabled == true {
@@ -98,6 +99,7 @@ struct SongView: View {
             }
             Button(action: {
               documents.first?.autotuneEnabled = false
+              Current.coreData.persistentContainer().saveContext()
               playAudio()
             }) {
               if documents.first?.autotuneEnabled == false {
@@ -173,6 +175,7 @@ struct SongView: View {
                   try FileManager.default.removeItem(at: destinationURL)
                 }
                 try FileManager.default.moveItem(at: url, to: destinationURL)
+                Current.coreData.persistentContainer().saveContext()
               } catch {
                 print(error)
                 self.isError = true
@@ -264,6 +267,7 @@ private func performAudioShift(
     if let shiftedAudio = pitchShifter.process(shouldContinue: &shouldContinue, pitchShift: 1, indata: floatData) {
       try shiftedAudioURL.writeAudioFile(shiftedAudio, sampleRate: sampleRate)
       document.needsPitchShift = false
+      Current.coreData.persistentContainer().saveContext()
       completion(.success(true))
     } else {
       completion(.success(false))
@@ -276,6 +280,7 @@ private func performAudioShift(
 private func snapToKey(_ document: PitshDocument) {
   document.eventsSorted?.forEach { $0.snapToKey() }
   document.needsPitchShift = true
+  Current.coreData.persistentContainer().saveContext()
 }
 
 //struct SongView_Previews: PreviewProvider {

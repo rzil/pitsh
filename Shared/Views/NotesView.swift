@@ -35,6 +35,7 @@ struct NotesView: View {
                   ) {
                     event.pitchShift += shift
                     event.relatedDocument?.needsPitchShift = true
+                    Current.coreData.persistentContainer().saveContext()
                   }
                 })
                 .onChanged { value in

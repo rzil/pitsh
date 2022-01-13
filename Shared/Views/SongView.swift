@@ -77,10 +77,12 @@ struct SongView: View {
         }
         HStack {
           Spacer()
-          Button(action: { isRecorderPresented = true }) {
-            Text("Record")
+          Group {
+            Button(action: { isRecorderPresented = true }) {
+              Text("Record")
+            }
+            Spacer()
           }
-          Spacer()
           Button(action: { playAudio() }) {
             Text("Play")
           }
@@ -111,6 +113,10 @@ struct SongView: View {
           Spacer()
           Button(action: { isKeysPresented = true }) {
             Text(document.keyString)
+          }
+          Spacer()
+          Button(action: { snapToKey(document) }) {
+            Text("Snap")
           }
           Spacer()
         }
@@ -264,6 +270,11 @@ private func performAudioShift(
   } catch {
     completion(.failure(error))
   }
+}
+
+private func snapToKey(_ document: PitshDocument) {
+  document.eventsSorted?.forEach { $0.snapToKey() }
+  document.needsPitchShift = true
 }
 
 //struct SongView_Previews: PreviewProvider {

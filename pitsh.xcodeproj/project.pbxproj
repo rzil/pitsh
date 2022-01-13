@@ -59,6 +59,8 @@
 		77C0D2FE26AA19AD00670F6C /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77C0D2FC26AA19AD00670F6C /* Utilities.swift */; };
 		77D44AAB278EF6D0003468DB /* PitshDocument+Autocorrelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D44AAA278EF6D0003468DB /* PitshDocument+Autocorrelation.swift */; };
 		77D44AAC278EF6D0003468DB /* PitshDocument+Autocorrelation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D44AAA278EF6D0003468DB /* PitshDocument+Autocorrelation.swift */; };
+		77D44AAE278FE68E003468DB /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D44AAD278FE68E003468DB /* ActivityViewController.swift */; };
+		77D44AAF278FE68E003468DB /* ActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77D44AAD278FE68E003468DB /* ActivityViewController.swift */; };
 		77EC5AEB27713E2B00678CE1 /* NoteNamesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EC5AEA27713E2B00678CE1 /* NoteNamesView.swift */; };
 		77EC5AEC27713E2B00678CE1 /* NoteNamesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EC5AEA27713E2B00678CE1 /* NoteNamesView.swift */; };
 		77EC5AEE2771674D00678CE1 /* NoteView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77EC5AED2771674D00678CE1 /* NoteView.swift */; };
@@ -121,6 +123,7 @@
 		77C0D2F526AA197A00670F6C /* PitchDetector.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PitchDetector.swift; sourceTree = "<group>"; };
 		77C0D2FC26AA19AD00670F6C /* Utilities.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		77D44AAA278EF6D0003468DB /* PitshDocument+Autocorrelation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PitshDocument+Autocorrelation.swift"; sourceTree = "<group>"; };
+		77D44AAD278FE68E003468DB /* ActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityViewController.swift; sourceTree = "<group>"; };
 		77EC5AEA27713E2B00678CE1 /* NoteNamesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteNamesView.swift; sourceTree = "<group>"; };
 		77EC5AED2771674D00678CE1 /* NoteView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteView.swift; sourceTree = "<group>"; };
 		77EC5AF1277262F300678CE1 /* Stroke.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stroke.swift; sourceTree = "<group>"; };
@@ -226,6 +229,7 @@
 				776378A22772B1F700C32125 /* Views */,
 				77EC5AF1277262F300678CE1 /* Stroke.swift */,
 				776378A3277344A800C32125 /* PitshError.swift */,
+				77D44AAD278FE68E003468DB /* ActivityViewController.swift */,
 				778CEBCB276EB29600E6C53E /* Helpers.swift */,
 				77C0D2B426AA17A600670F6C /* ContentView.swift */,
 				77C0D2B526AA17A600670F6C /* Assets.xcassets */,
@@ -463,6 +467,7 @@
 				778CEBBF276DA5FC00E6C53E /* PitshEvent+Extensions.swift in Sources */,
 				774186F1276FC3D30068D524 /* SongView.swift in Sources */,
 				778CEBB1276D930600E6C53E /* URL+AudioFile.swift in Sources */,
+				77D44AAE278FE68E003468DB /* ActivityViewController.swift in Sources */,
 				778CEBC5276EB19C00E6C53E /* GlobalEnvironment.swift in Sources */,
 				776378A4277344A800C32125 /* PitshError.swift in Sources */,
 				77EC5AEB27713E2B00678CE1 /* NoteNamesView.swift in Sources */,
@@ -496,6 +501,7 @@
 				778CEBC0276DA5FC00E6C53E /* PitshEvent+Extensions.swift in Sources */,
 				774186F2276FC3D30068D524 /* SongView.swift in Sources */,
 				778CEBB2276D930600E6C53E /* URL+AudioFile.swift in Sources */,
+				77D44AAF278FE68E003468DB /* ActivityViewController.swift in Sources */,
 				778CEBC6276EB19C00E6C53E /* GlobalEnvironment.swift in Sources */,
 				776378A5277344A800C32125 /* PitshError.swift in Sources */,
 				77EC5AEC27713E2B00678CE1 /* NoteNamesView.swift in Sources */,

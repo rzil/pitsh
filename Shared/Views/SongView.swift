@@ -26,6 +26,7 @@ struct SongView: View {
   @State var isKeysPresented = false
   @State var isRecorderPresented = false
   @State var isProcessing = false
+  @State var isSharePresented = false
   @StateObject private var conductor = Current.conductor
   @State var isError = false
   private var shouldContinue = ShouldContinue()
@@ -77,6 +78,8 @@ struct SongView: View {
         }
         HStack {
           Spacer()
+
+          // record
           Group {
             Button(action: { isRecorderPresented = true }) {
               Text("Record")
@@ -84,48 +87,76 @@ struct SongView: View {
             .disabled(!conductor.state.isStopped)
             Spacer()
           }
-          Button(action: { playAudio() }) {
-            Text("Play")
-          }
-          .disabled(!conductor.state.isStopped)
-          .contextMenu {
-            Button(action: {
-              documents.first?.autotuneEnabled = true
-              Current.coreData.persistentContainer().saveContext()
-              playAudio()
-            }) {
-              if documents.first?.autotuneEnabled == true {
-                Image(systemName: "checkmark")
-              }
-              Text("Tuned")
+
+          // play
+          Group {
+            Button(action: { playAudio() }) {
+              Text("Play")
             }
-            Button(action: {
-              documents.first?.autotuneEnabled = false
-              Current.coreData.persistentContainer().saveContext()
-              playAudio()
-            }) {
-              if documents.first?.autotuneEnabled == false {
-                Image(systemName: "checkmark")
+            .disabled(!conductor.state.isStopped)
+            .contextMenu {
+              Button(action: {
+                documents.first?.autotuneEnabled = true
+                Current.coreData.persistentContainer().saveContext()
+                playAudio()
+              }) {
+                if documents.first?.autotuneEnabled == true {
+                  Image(systemName: "checkmark")
+                }
+                Text("Tuned")
               }
-              Text("Original")
+              Button(action: {
+                documents.first?.autotuneEnabled = false
+                Current.coreData.persistentContainer().saveContext()
+                playAudio()
+              }) {
+                if documents.first?.autotuneEnabled == false {
+                  Image(systemName: "checkmark")
+                }
+                Text("Original")
+              }
             }
+            Spacer()
           }
-          Spacer()
-          Button(action: { stopAudio() }) {
-            Text("Stop")
+
+          // stop
+          Group {
+            Button(action: { stopAudio() }) {
+              Text("Stop")
+            }
+            .disabled(conductor.state.isStopped)
+            Spacer()
           }
-          .disabled(conductor.state.isStopped)
-          Spacer()
-          Button(action: { isKeysPresented = true }) {
-            Text(document.keyString)
+
+          // key signature
+          Group {
+            Button(action: { isKeysPresented = true }) {
+              Text(document.keyString)
+            }
+            .disabled(!conductor.state.isStopped)
+            Spacer()
           }
-          .disabled(!conductor.state.isStopped)
-          Spacer()
-          Button(action: { snapToKey(document) }) {
-            Text("Snap")
+
+          // snap
+          Group {
+            Button(action: { snapToKey(document) }) {
+              Text("Snap")
+            }
+            .disabled(!conductor.state.isStopped)
+            Spacer()
           }
-          .disabled(!conductor.state.isStopped)
-          Spacer()
+
+          // share
+          Group {
+            Button(action: { isSharePresented = true }) {
+              Image(systemName: "square.and.arrow.up")
+            }
+            .disabled(!conductor.state.isStopped)
+            .sheet(isPresented: $isSharePresented) {
+              ActivityViewController(activityItems: (document.shiftedAudioFileURL.map { [$0] } ?? []) )
+            }
+            Spacer()
+          }
         }
         Spacer()
       }

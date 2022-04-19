@@ -74,10 +74,10 @@ struct KeysView: View {
     let selectedKey = KeySignature.allCases[keyPair.root + (keyPair.major ? 0 : 12)]
     self._selectedKey = .init(initialValue: selectedKey)
   }
-
+  
   @Environment(\.dismiss) var dismiss
   private let document: PitshDocument
-
+  
   private var rankedKeys: [KeySignature] {
     guard let eventsSorted = document.eventsSorted else { return [] }
     let kd = KeyDetector()
@@ -86,9 +86,9 @@ struct KeysView: View {
       .sorted(by: { $0.score > $1.score })
       .map({KeySignature.allCases[$0.root + ($0.major ? 0 : 12)]})
   }
-
+  
   @State private var selectedKey: KeySignature
-
+  
   var body: some View {
     Picker("Key", selection: $selectedKey) {
       ForEach(rankedKeys) { key in
@@ -97,17 +97,23 @@ struct KeysView: View {
     }
     .pickerStyle(InlinePickerStyle())
     Text("Selected key: \(selectedKey.name)")
-
+    
     HStack {
       Spacer()
-      Button("Cancel") {
-        dismiss()
+      Button(action: { dismiss() }) {
+        Text("Cancel")
+          .frame(maxWidth: .infinity, maxHeight: 44)
       }
+      .buttonStyle(.bordered)
       Spacer()
-      Button("Done") {
+      Button(action: {
         document.key = Int16(selectedKey.rawValue)
         dismiss()
+      }) {
+        Text("Done")
+          .frame(maxWidth: .infinity, maxHeight: 44)
       }
+      .buttonStyle(.bordered)
       Spacer()
     }
   }

@@ -14,27 +14,35 @@ struct RecorderView: View {
         Spacer()
         Button(action: { conductor.state = .recording }) {
           Text("Record")
+            .frame(maxWidth: .infinity, maxHeight: 50)
         }
+        .buttonStyle(.bordered)
         .disabled(!conductor.state.isStopped)
       }
       Group {
         Spacer()
         Button(action: { conductor.state = .playing(nil) }) {
           Text("Play")
+            .frame(maxWidth: .infinity, maxHeight: 50)
         }
+        .buttonStyle(.bordered)
         .disabled(!conductor.state.isStopped)
       }
       Spacer()
       Button(action: { conductor.state = .stopped }) {
         Text("Stop")
+          .frame(maxWidth: .infinity, maxHeight: 50)
       }
+      .buttonStyle(.bordered)
       .disabled(conductor.state.isStopped)
       Spacer()
       HStack {
         Spacer()
         Button(action: { onComplete(nil) }) {
           Text("Cancel")
+            .frame(maxWidth: .infinity, maxHeight: 50)
         }
+        .buttonStyle(.bordered)
         .disabled(!conductor.state.isStopped)
         Spacer()
         Button(action: {
@@ -46,7 +54,9 @@ struct RecorderView: View {
           }
         }) {
           Text("Done")
+            .frame(maxWidth: .infinity, maxHeight: 50)
         }
+        .buttonStyle(.bordered)
         .disabled(!conductor.state.isStopped)
         Spacer()
       }

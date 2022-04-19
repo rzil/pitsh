@@ -83,7 +83,9 @@ struct SongView: View {
           Group {
             Button(action: { isRecorderPresented = true }) {
               Text("Record")
+                .frame(maxWidth: .infinity)
             }
+            .buttonStyle(.bordered)
             .disabled(!conductor.state.isStopped)
             Spacer()
           }
@@ -92,7 +94,9 @@ struct SongView: View {
           Group {
             Button(action: { playAudio() }) {
               Text("Play")
+                .frame(maxWidth: .infinity)
             }
+            .buttonStyle(.bordered)
             .disabled(!conductor.state.isStopped)
             .contextMenu {
               Button(action: {
@@ -104,7 +108,9 @@ struct SongView: View {
                   Image(systemName: "checkmark")
                 }
                 Text("Tuned")
+                  .frame(maxWidth: .infinity)
               }
+              .buttonStyle(.bordered)
               Button(action: {
                 documents.first?.autotuneEnabled = false
                 Current.coreData.persistentContainer().saveContext()
@@ -114,7 +120,9 @@ struct SongView: View {
                   Image(systemName: "checkmark")
                 }
                 Text("Original")
+                  .frame(maxWidth: .infinity)
               }
+              .buttonStyle(.bordered)
             }
             Spacer()
           }
@@ -123,7 +131,9 @@ struct SongView: View {
           Group {
             Button(action: { stopAudio() }) {
               Text("Stop")
+                .frame(maxWidth: .infinity)
             }
+            .buttonStyle(.bordered)
             .disabled(conductor.state.isStopped)
             Spacer()
           }
@@ -132,7 +142,9 @@ struct SongView: View {
           Group {
             Button(action: { isKeysPresented = true }) {
               Text(document.keyString)
+                .frame(maxWidth: .infinity)
             }
+            .buttonStyle(.bordered)
             .disabled(!conductor.state.isStopped)
             Spacer()
           }
@@ -141,7 +153,9 @@ struct SongView: View {
           Group {
             Button(action: { snapToKey(document) }) {
               Text("Snap")
+                .frame(maxWidth: .infinity)
             }
+            .buttonStyle(.bordered)
             .disabled(!conductor.state.isStopped)
             Spacer()
           }
@@ -151,6 +165,7 @@ struct SongView: View {
             Button(action: { isSharePresented = true }) {
               Image(systemName: "square.and.arrow.up")
             }
+            .buttonStyle(.bordered)
             .disabled(!conductor.state.isStopped)
             .sheet(isPresented: $isSharePresented) {
               ActivityViewController(activityItems: (document.shiftedAudioFileURL.map { [$0] } ?? []) )
@@ -170,22 +185,32 @@ struct SongView: View {
       .sheet(isPresented: $isProcessing) {
         VStack {
           Spacer()
+          Text("Processing").bold()
+          Spacer()
           ProgressView()
           Spacer()
-          Button("Cancel") {
-            isProcessing = false
+          Button(action: { isProcessing = false }) {
+            Text("Cancel")
+              .frame(maxWidth: .infinity, maxHeight: 60)
           }
+          .buttonStyle(.bordered)
           Spacer()
         }
+        .padding()
       }
       .sheet(isPresented: $isKeysPresented) {
         KeysView(document)
       }
       .sheet(isPresented: $isError) {
-        Text("Something went wrong.")
-        Button("OK") {
-          isError = false
+        VStack {
+          Text("Something went wrong.").bold()
+          Button(action: { isError = false }) {
+            Text("Ok")
+              .frame(maxWidth: .infinity, maxHeight: 60)
+          }
+          .buttonStyle(.bordered)
         }
+        .padding()
       }
       .onChange(of: isProcessing) { newValue in
         shouldContinue.value = newValue

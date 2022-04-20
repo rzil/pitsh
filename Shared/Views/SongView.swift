@@ -185,7 +185,8 @@ struct SongView: View {
       .sheet(isPresented: $isProcessing) {
         VStack {
           Spacer()
-          Text("Processing").bold()
+          Text("Processing")
+            .font(.title)
           Spacer()
           ProgressView()
           Spacer()
@@ -203,7 +204,8 @@ struct SongView: View {
       }
       .sheet(isPresented: $isError) {
         VStack {
-          Text("Something went wrong.").bold()
+          Text("Something went wrong.")
+            .font(.title)
           Button(action: { isError = false }) {
             Text("Ok")
               .frame(maxWidth: .infinity, maxHeight: 60)

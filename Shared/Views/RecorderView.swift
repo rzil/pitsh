@@ -9,6 +9,7 @@ struct RecorderView: View {
       Group {
         Spacer()
         Text(conductor.state.string)
+          .font(.title)
       }
       Group {
         Spacer()

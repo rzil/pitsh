@@ -97,7 +97,8 @@ struct KeysView: View {
     }
     .pickerStyle(InlinePickerStyle())
     Text("Selected key: \(selectedKey.name)")
-    
+      .font(.headline)
+
     HStack {
       Spacer()
       Button(action: { dismiss() }) {

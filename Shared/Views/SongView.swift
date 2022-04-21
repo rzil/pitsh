@@ -168,7 +168,7 @@ struct SongView: View {
               Image(systemName: "square.and.arrow.up")
             }
             .buttonStyle(.bordered)
-            .disabled(!conductor.state.isStopped)
+            .disabled(!conductor.state.isStopped || document.pitches == nil)
             .sheet(isPresented: $isSharePresented) {
               ActivityViewController(activityItems: (document.shiftedAudioFileURL.map { [$0] } ?? []) )
             }

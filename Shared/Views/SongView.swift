@@ -74,6 +74,8 @@ struct SongView: View {
             }
           } else {
             Text("Please record some audio")
+              .font(.title)
+              .padding()
           }
         }
         HStack {

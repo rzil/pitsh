@@ -9,3 +9,8 @@ My name is Ruben Zilibowitz. I have a background in mathematics and music. I wor
 ### Support or Contact
 
 Having trouble with Pitsh? Drop me an email at [contact support](mailto:pitsh_AT_rubenz.net) and I will help you sort it out.
+
+### Privacy Policy
+
+In compliance with Apple App Store regulations here is the
+[privacy policy](privacy).

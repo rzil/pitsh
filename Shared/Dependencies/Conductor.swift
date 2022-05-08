@@ -42,6 +42,8 @@ class Conductor: ObservableObject {
   let engine = AudioEngine()
   private(set) var recorder: NodeRecorder?
   let player = AudioPlayer()
+  var silencer: Fader?
+  let mixer = Mixer()
 
   @Published var state = RecorderState() {
     didSet {
@@ -74,33 +76,37 @@ class Conductor: ObservableObject {
       }
     }
   }
-
+  
   init() {
-    #if os(iOS)
+#if os(iOS)
     do {
-        Settings.bufferLength = .short
-        try AVAudioSession.sharedInstance().setPreferredIOBufferDuration(Settings.bufferLength.duration)
-        try AVAudioSession.sharedInstance().setCategory(.playAndRecord,
-                                                        options: [.defaultToSpeaker, .mixWithOthers, .allowBluetoothA2DP])
-        try AVAudioSession.sharedInstance().setActive(true)
+      Settings.bufferLength = .short
+      try AVAudioSession.sharedInstance().setPreferredIOBufferDuration(Settings.bufferLength.duration)
+      try AVAudioSession.sharedInstance().setCategory(.playAndRecord,
+                                                      options: [.defaultToSpeaker, .mixWithOthers, .allowBluetoothA2DP])
+      try AVAudioSession.sharedInstance().setActive(true)
     } catch let err {
-        print(err)
+      print(err)
     }
-    #endif
-
+#endif
+    
     guard let input = engine.input else {
       fatalError()
     }
-
+    
     do {
       recorder = try NodeRecorder(node: input)
     } catch let err {
       fatalError("\(err)")
     }
-    engine.output = player
+    let silencer = Fader(input, gain: 0)
+    self.silencer = silencer
+    mixer.addInput(silencer)
+    mixer.addInput(player)
+    engine.output = mixer
     NodeRecorder.removeTempFiles()
   }
-
+  
   func start() {
     do {
       try engine.start()
@@ -108,7 +114,7 @@ class Conductor: ObservableObject {
       print(err)
     }
   }
-
+  
   func stop() {
     engine.stop()
   }

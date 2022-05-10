@@ -14,3 +14,7 @@ Having trouble with Pitsh? Drop me an email at [contact support](mailto:pitsh_AT
 
 In compliance with Apple App Store regulations here is the
 [privacy policy](privacy).
+
+### App store
+
+The app is available in the Apple App Store [here](https://apps.apple.com/us/app/pitsh/id1620263782).

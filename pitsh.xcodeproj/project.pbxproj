@@ -14,6 +14,8 @@
 		774186F6276FEE8A0068D524 /* WaveView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 774186F4276FEE8A0068D524 /* WaveView.swift */; };
 		77473C5D26C3547D0048F16E /* PitchShifter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77473C5C26C3547D0048F16E /* PitchShifter.swift */; };
 		77473C5E26C3547D0048F16E /* PitchShifter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77473C5C26C3547D0048F16E /* PitchShifter.swift */; };
+		774DF68F2831D53B005F2200 /* ErrorCheckCorrect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 774DF68E2831D53B005F2200 /* ErrorCheckCorrect.swift */; };
+		774DF6902831D53B005F2200 /* ErrorCheckCorrect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 774DF68E2831D53B005F2200 /* ErrorCheckCorrect.swift */; };
 		7763789F2772A1D300C32125 /* NotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7763789E2772A1D300C32125 /* NotesView.swift */; };
 		776378A02772A1D300C32125 /* NotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7763789E2772A1D300C32125 /* NotesView.swift */; };
 		776378A4277344A800C32125 /* PitshError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 776378A3277344A800C32125 /* PitshError.swift */; };
@@ -90,6 +92,7 @@
 		774186F0276FC3D30068D524 /* SongView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SongView.swift; sourceTree = "<group>"; };
 		774186F4276FEE8A0068D524 /* WaveView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveView.swift; sourceTree = "<group>"; };
 		77473C5C26C3547D0048F16E /* PitchShifter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PitchShifter.swift; sourceTree = "<group>"; };
+		774DF68E2831D53B005F2200 /* ErrorCheckCorrect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorCheckCorrect.swift; sourceTree = "<group>"; };
 		7763789A27728D3500C32125 /* pitsh (iOS).entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "pitsh (iOS).entitlements"; sourceTree = "<group>"; };
 		7763789E2772A1D300C32125 /* NotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotesView.swift; sourceTree = "<group>"; };
 		776378A3277344A800C32125 /* PitshError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PitshError.swift; sourceTree = "<group>"; };
@@ -231,6 +234,7 @@
 				776378A3277344A800C32125 /* PitshError.swift */,
 				77D44AAD278FE68E003468DB /* ActivityViewController.swift */,
 				778CEBCB276EB29600E6C53E /* Helpers.swift */,
+				774DF68E2831D53B005F2200 /* ErrorCheckCorrect.swift */,
 				77C0D2B426AA17A600670F6C /* ContentView.swift */,
 				77C0D2B526AA17A600670F6C /* Assets.xcassets */,
 				778CEBC7276EB1C600E6C53E /* Dependencies */,
@@ -475,6 +479,7 @@
 				77EC5AEE2771674D00678CE1 /* NoteView.swift in Sources */,
 				778CEBC9276EB1D300E6C53E /* CoreData.swift in Sources */,
 				778CEBBD276DA5FC00E6C53E /* PitshDocument+Extensions.swift in Sources */,
+				774DF68F2831D53B005F2200 /* ErrorCheckCorrect.swift in Sources */,
 				776378AF2775841300C32125 /* KeysView.swift in Sources */,
 				774186F5276FEE8A0068D524 /* WaveView.swift in Sources */,
 				77C0D2FD26AA19AD00670F6C /* Utilities.swift in Sources */,
@@ -509,6 +514,7 @@
 				77EC5AEF2771674D00678CE1 /* NoteView.swift in Sources */,
 				778CEBCA276EB1D300E6C53E /* CoreData.swift in Sources */,
 				778CEBBE276DA5FC00E6C53E /* PitshDocument+Extensions.swift in Sources */,
+				774DF6902831D53B005F2200 /* ErrorCheckCorrect.swift in Sources */,
 				776378B02775841300C32125 /* KeysView.swift in Sources */,
 				774186F6276FEE8A0068D524 /* WaveView.swift in Sources */,
 				77C0D2FE26AA19AD00670F6C /* Utilities.swift in Sources */,

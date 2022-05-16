@@ -14,7 +14,7 @@ struct NoteView: View {
 
   var body: some View {
     GeometryReader { geometry in
-      let bounds = geometry.frame(in: .local)
+      let bounds = ecc(geometry.frame(in: .local))
       if showBounds {
         Rectangle()
           .stroke(Color(white: 0.5, opacity: 1))

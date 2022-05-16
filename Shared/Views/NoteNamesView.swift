@@ -12,7 +12,8 @@ struct NoteNamesView: View {
   
   var body: some View {
     GeometryReader { geometry in
-      ForEach(noteNames(height: geometry.size.height, document: document)) { x in
+      let height = ecc(geometry.size.height)
+      ForEach(noteNames(height: height, document: document)) { x in
         Text(x.name)
           .foregroundColor(.black)
           .font(.caption)

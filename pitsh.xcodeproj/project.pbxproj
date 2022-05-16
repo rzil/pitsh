@@ -701,7 +701,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = net.rubenz.pitsh;
 				PRODUCT_NAME = pitsh;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -730,7 +730,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.1;
+				MARKETING_VERSION = 0.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = net.rubenz.pitsh;
 				PRODUCT_NAME = pitsh;
 				PROVISIONING_PROFILE_SPECIFIER = "";

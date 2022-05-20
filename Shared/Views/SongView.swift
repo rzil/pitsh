@@ -23,12 +23,13 @@ struct SongView: View {
     sortDescriptors: []
   ) var documents: FetchedResults<PitshDocument>
 
-  @State var isKeysPresented = false
-  @State var isRecorderPresented = false
-  @State var isProcessing = false
-  @State var isSharePresented = false
+  private var document: PitshDocument {
+    documents.first!
+  }
+
   @StateObject private var conductor = Current.conductor
-  @State var isError = false
+  @StateObject private var viewModel = SongViewModel()
+  @State private var isPresentingError = false
   private var shouldContinue = ShouldContinue()
 
   private let secondsPerScreen: Double = 5
@@ -42,6 +43,123 @@ struct SongView: View {
       width *= CGFloat(Double(pitches.count) / framesPerScreen)
     }
     return width
+  }
+
+  var recordButton: some View {
+    Button(action: { viewModel.isRecorderPresented = true }) {
+      Text("Record")
+        .frame(maxWidth: .infinity)
+    }
+    .buttonStyle(.bordered)
+    .disabled(!conductor.state.isStopped)
+  }
+
+  var playButton: some View {
+    Button(action: { playAudio() }) {
+      Text("Play")
+        .frame(maxWidth: .infinity)
+    }
+    .buttonStyle(.bordered)
+    .disabled(!conductor.state.isStopped)
+    .contextMenu {
+      Button(action: {
+        documents.first?.autotuneEnabled = true
+        Current.coreData.persistentContainer().saveContext()
+        playAudio()
+      }) {
+        if documents.first?.autotuneEnabled == true {
+          Image(systemName: "checkmark")
+        }
+        Text("Tuned")
+          .frame(maxWidth: .infinity)
+      }
+      .buttonStyle(.bordered)
+      Button(action: {
+        documents.first?.autotuneEnabled = false
+        Current.coreData.persistentContainer().saveContext()
+        playAudio()
+      }) {
+        if documents.first?.autotuneEnabled == false {
+          Image(systemName: "checkmark")
+        }
+        Text("Original")
+          .frame(maxWidth: .infinity)
+      }
+      .buttonStyle(.bordered)
+    }
+  }
+
+  var stopButton: some View {
+    Button(action: { stopAudio() }) {
+      Text("Stop")
+        .frame(maxWidth: .infinity)
+    }
+    .buttonStyle(.bordered)
+    .disabled(conductor.state.isStopped)
+  }
+
+  var keyButton: some View {
+    Button(action: { viewModel.isKeysPresented = true }) {
+      Text(document.keyString)
+        .frame(maxWidth: .infinity)
+    }
+    .buttonStyle(.bordered)
+    .disabled(!conductor.state.isStopped)
+  }
+
+  var snapButton: some View {
+    Button(action: { snapToKey(document) }) {
+      Text("Snap")
+        .frame(maxWidth: .infinity)
+    }
+    .buttonStyle(.bordered)
+    .disabled(!conductor.state.isStopped)
+  }
+
+  var shareButton: some View {
+    Button(action: { viewModel.isSharePresented = true }) {
+      Image(systemName: "square.and.arrow.up")
+    }
+    .buttonStyle(.bordered)
+    .disabled(!conductor.state.isStopped || document.pitches == nil)
+    .sheet(isPresented: $viewModel.isSharePresented) {
+      ActivityViewController(activityItems: (document.shiftedAudioFileURL.map { [$0] } ?? []) )
+    }
+  }
+
+  var processingSheet: some View {
+    VStack(alignment: .center, spacing: 16) {
+      Spacer()
+      Text("Processing")
+        .font(.title)
+      Spacer()
+      ProgressView()
+      Spacer()
+      Button(action: { viewModel.isProcessing = false }) {
+        Text("Cancel")
+          .frame(maxWidth: .infinity, maxHeight: 60)
+      }
+      .buttonStyle(.bordered)
+      Spacer()
+    }
+    .padding()
+  }
+
+  var errorSheet: some View {
+    VStack(alignment: .center, spacing: 16) {
+      Text("Something went wrong.")
+        .font(.title)
+      if let message = viewModel.error?.localizedDescription {
+        Text(message)
+          .font(.callout)
+      }
+      Button(action: { isPresentingError = false }) {
+        Text("Ok")
+          .frame(maxWidth: .infinity, maxHeight: 60)
+      }
+      .buttonStyle(.bordered)
+    }
+    .padding()
   }
 
   var body: some View {
@@ -83,141 +201,63 @@ struct SongView: View {
 
           // record
           Group {
-            Button(action: { isRecorderPresented = true }) {
-              Text("Record")
-                .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.bordered)
-            .disabled(!conductor.state.isStopped)
+            recordButton
             Spacer()
           }
 
           // play
           Group {
-            Button(action: { playAudio() }) {
-              Text("Play")
-                .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.bordered)
-            .disabled(!conductor.state.isStopped)
-            .contextMenu {
-              Button(action: {
-                documents.first?.autotuneEnabled = true
-                Current.coreData.persistentContainer().saveContext()
-                playAudio()
-              }) {
-                if documents.first?.autotuneEnabled == true {
-                  Image(systemName: "checkmark")
-                }
-                Text("Tuned")
-                  .frame(maxWidth: .infinity)
-              }
-              .buttonStyle(.bordered)
-              Button(action: {
-                documents.first?.autotuneEnabled = false
-                Current.coreData.persistentContainer().saveContext()
-                playAudio()
-              }) {
-                if documents.first?.autotuneEnabled == false {
-                  Image(systemName: "checkmark")
-                }
-                Text("Original")
-                  .frame(maxWidth: .infinity)
-              }
-              .buttonStyle(.bordered)
-            }
+            playButton
             Spacer()
           }
 
           // stop
           Group {
-            Button(action: { stopAudio() }) {
-              Text("Stop")
-                .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.bordered)
-            .disabled(conductor.state.isStopped)
+            stopButton
             Spacer()
           }
 
           // key signature
           Group {
-            Button(action: { isKeysPresented = true }) {
-              Text(document.keyString)
-                .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.bordered)
-            .disabled(!conductor.state.isStopped)
+            keyButton
             Spacer()
           }
 
           // snap
           Group {
-            Button(action: { snapToKey(document) }) {
-              Text("Snap")
-                .frame(maxWidth: .infinity)
-            }
-            .buttonStyle(.bordered)
-            .disabled(!conductor.state.isStopped)
+            snapButton
             Spacer()
           }
 
           // share
           Group {
-            Button(action: { isSharePresented = true }) {
-              Image(systemName: "square.and.arrow.up")
-            }
-            .buttonStyle(.bordered)
-            .disabled(!conductor.state.isStopped || document.pitches == nil)
-            .sheet(isPresented: $isSharePresented) {
-              ActivityViewController(activityItems: (document.shiftedAudioFileURL.map { [$0] } ?? []) )
-            }
+            shareButton
             Spacer()
           }
         }
         Spacer()
       }
       .navigationTitle("Pitsh")
-      .sheet(isPresented: $isRecorderPresented) {
+      .sheet(isPresented: $viewModel.isRecorderPresented) {
         RecorderView { url in
           url.map(processAudio)
-          isRecorderPresented = false
+          viewModel.isRecorderPresented = false
         }
       }
-      .sheet(isPresented: $isProcessing) {
-        VStack {
-          Spacer()
-          Text("Processing")
-            .font(.title)
-          Spacer()
-          ProgressView()
-          Spacer()
-          Button(action: { isProcessing = false }) {
-            Text("Cancel")
-              .frame(maxWidth: .infinity, maxHeight: 60)
-          }
-          .buttonStyle(.bordered)
-          Spacer()
-        }
-        .padding()
+      .sheet(isPresented: $viewModel.isProcessing) {
+        processingSheet
       }
-      .sheet(isPresented: $isKeysPresented) {
+      .sheet(isPresented: $viewModel.isKeysPresented) {
         KeysView(document)
       }
-      .sheet(isPresented: $isError) {
-        VStack {
-          Text("Something went wrong.")
-            .font(.title)
-          Button(action: { isError = false }) {
-            Text("Ok")
-              .frame(maxWidth: .infinity, maxHeight: 60)
-          }
-          .buttonStyle(.bordered)
-        }
-        .padding()
+      .sheet(isPresented: $isPresentingError) {
+        errorSheet
       }
-      .onChange(of: isProcessing) { newValue in
+      .onReceive(viewModel.$isProcessing, perform: { newValue in
         shouldContinue.value = newValue
+      })
+      .onReceive(viewModel.$error) { newValue in
+        isPresentingError = (newValue != nil)
       }
     } else {
       Text("No document error")
@@ -227,7 +267,7 @@ struct SongView: View {
   private func processAudio(_ url: URL) {
     guard let document = documents.first,
           let destinationURL = document.audioFileURL else { return }
-    isProcessing = true
+    viewModel.isProcessing = true
     DispatchQueue.global(qos: .background).async {
       document.performAutocorrelation(shouldContinue: &shouldContinue.value, audioFileURL: url) { result in
         DispatchQueue.main.async {
@@ -242,15 +282,13 @@ struct SongView: View {
                 try FileManager.default.moveItem(at: url, to: destinationURL)
                 Current.coreData.persistentContainer().saveContext()
               } catch {
-                print(error)
-                self.isError = true
+                self.viewModel.error = error
               }
             }
           case .failure(let error):
-            print(error)
-            self.isError = true
+            self.viewModel.error = error
           }
-          self.isProcessing = false
+          self.viewModel.isProcessing = false
         }
       }
     }
@@ -259,19 +297,18 @@ struct SongView: View {
   private func shiftAudioAndPlay() {
     guard let document = documents.first else { return }
     if document.needsPitchShift {
-      isProcessing = true
+      viewModel.isProcessing = true
       DispatchQueue.global(qos: .background).async {
         performAudioShift(shouldContinue: &shouldContinue.value, document: document) { result in
           DispatchQueue.main.async {
-            isProcessing = false
+            viewModel.isProcessing = false
             switch result {
             case .success(let finished):
               if finished {
                 conductor.state = .playing(document.shiftedAudioFileURL)
               }
             case .failure(let error):
-              print(error)
-              self.isError = true
+              self.viewModel.error = error
             }
           }
         }
@@ -348,8 +385,10 @@ private func snapToKey(_ document: PitshDocument) {
   Current.coreData.persistentContainer().saveContext()
 }
 
-//struct SongView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SongView()
-//    }
-//}
+final class SongViewModel: ObservableObject {
+  @Published var isKeysPresented = false
+  @Published var isRecorderPresented = false
+  @Published var isSharePresented = false
+  @Published var isProcessing = false
+  @Published var error: Error?
+}

@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+private let minimumDuration: Double = 1
+
 struct SongView: View {
 
   // This class is used to pass a flag into
@@ -230,7 +232,7 @@ struct SongView: View {
         RecorderView { result in
           viewModel.isRecorderPresented = false
           if let (url, duration) = result {
-            if duration > 2 {
+            if duration > minimumDuration {
               processAudio(url)
             } else {
               self.viewModel.error = PitshError("Recording duration too short")
@@ -254,7 +256,7 @@ struct SongView: View {
         isPresentingError = (newValue != nil)
       }
     } else {
-      Text("No document error")
+      Text("No document exists")
     }
   }
 

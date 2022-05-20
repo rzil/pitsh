@@ -55,10 +55,12 @@ class Conductor: ObservableObject {
         switch state {
         case .recording:
           NodeRecorder.removeTempFiles()
+          try recorder?.reset()
           try recorder?.record()
         case .playing(let url):
           if let sourceURL = url ?? recorder?.audioFile?.url {
-            try player.file = AVAudioFile(forReading: sourceURL)
+            player.reset()
+            try player.load(file: AVAudioFile(forReading: sourceURL))
             player.completionHandler = {
               DispatchQueue.main.async { [weak self] in
                 self?.state = .stopped

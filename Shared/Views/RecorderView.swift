@@ -1,5 +1,7 @@
 import SwiftUI
 
+private let minimumDuration: Double = 2
+
 struct RecorderView: View {
   @StateObject private var conductor = Current.conductor
   
@@ -48,7 +50,7 @@ struct RecorderView: View {
         Spacer()
         Button(action: {
           if let recordedDuration = conductor.recorder?.recordedDuration,
-             recordedDuration > 0 {
+             recordedDuration > minimumDuration {
             onComplete(conductor.recorder?.audioFile?.url)
           } else {
             onComplete(nil)

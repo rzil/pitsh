@@ -276,6 +276,7 @@ struct SongView: View {
                   try FileManager.default.removeItem(at: destinationURL)
                 }
                 try FileManager.default.moveItem(at: url, to: destinationURL)
+                document.needsPitchShift = true
                 Current.coreData.persistentContainer().saveContext()
               } catch {
                 self.viewModel.error = error

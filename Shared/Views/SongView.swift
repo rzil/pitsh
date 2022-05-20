@@ -198,38 +198,26 @@ struct SongView: View {
         }
         HStack {
           Spacer()
-
-          // record
           Group {
             recordButton
             Spacer()
           }
-
-          // play
           Group {
             playButton
             Spacer()
           }
-
-          // stop
           Group {
             stopButton
             Spacer()
           }
-
-          // key signature
           Group {
             keyButton
             Spacer()
           }
-
-          // snap
           Group {
             snapButton
             Spacer()
           }
-
-          // share
           Group {
             shareButton
             Spacer()

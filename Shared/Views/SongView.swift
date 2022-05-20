@@ -227,9 +227,15 @@ struct SongView: View {
       }
       .navigationTitle("Pitsh")
       .sheet(isPresented: $viewModel.isRecorderPresented) {
-        RecorderView { url in
-          url.map(processAudio)
+        RecorderView { result in
           viewModel.isRecorderPresented = false
+          if let (url, duration) = result {
+            if duration > 2 {
+              processAudio(url)
+            } else {
+              self.viewModel.error = PitshError("Recording duration too short")
+            }
+          }
         }
       }
       .sheet(isPresented: $viewModel.isProcessing) {

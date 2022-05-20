@@ -1,11 +1,9 @@
 import SwiftUI
 
-private let minimumDuration: Double = 2
-
 struct RecorderView: View {
   @StateObject private var conductor = Current.conductor
   
-  let onComplete: (URL?) -> Void
+  let onComplete: ((URL, Double)?) -> Void
   var body: some View {
     VStack {
       Group {
@@ -49,9 +47,10 @@ struct RecorderView: View {
         .disabled(!conductor.state.isStopped)
         Spacer()
         Button(action: {
-          if let recordedDuration = conductor.recorder?.recordedDuration,
-             recordedDuration > minimumDuration {
-            onComplete(conductor.recorder?.audioFile?.url)
+          if let url = conductor.recorder?.audioFile?.url,
+             let recordedDuration = conductor.recorder?.recordedDuration,
+             recordedDuration > 0 {
+            onComplete((url, recordedDuration))
           } else {
             onComplete(nil)
           }

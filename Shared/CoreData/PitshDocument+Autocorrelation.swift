@@ -47,7 +47,12 @@ extension PitshDocument {
       let minNoteDuration:Double = 0.2
       let minNoteFrames = Int(sampleRate / Double(stepSize) * minNoteDuration)
       let events = nd.process(pitchTrack: pitches, envelope: powers, minNoteFrames: minNoteFrames)
-      
+
+      guard events.count > 0 else {
+        completionHandler(.failure(PitshError("No events detected")))
+        return
+      }
+
       let kd = KeyDetector()
       let keys = kd.process(notes: events.map({(Int(round($0.avPitch + $0.pitchShift)), Double($0.end - $0.start) * Double($0.avPower))}))
       let bestKey = keys.first ?? (root: 0, major: true, score: 0)

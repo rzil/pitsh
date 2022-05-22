@@ -37,7 +37,8 @@ private func noteNames(height: CGFloat, document: PitshDocument) -> [NoteName] {
   let minPitch = Int(smallest)
   let maxPitch = Int(biggest + 3)
   let noteHeight = height / CGFloat(range)
-  return (minPitch ... maxPitch).map {
+  let pitches = stride(from: minPitch, to: maxPitch, by: noteHeight > 16 ? 1 : 2)
+  return pitches.map {
     NoteName(
       name: noteName(from: $0),
       height: noteHeight,

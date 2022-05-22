@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct NoteNamesView: View {
-  let document: PitshDocument
-  
+  let documents: FetchedResults<PitshDocument>
+  private var document: PitshDocument {
+    documents.first!
+  }
+
   var body: some View {
     GeometryReader { geometry in
       ForEach(noteNames(height: geometry.size.height, document: document)) { x in
@@ -61,9 +64,3 @@ private func noteToStr(x: Int) -> String {
 private func noteGetAcc(x: Int) -> Int {
     return Int(floor(Double((x + 1)) / 7))
 }
-
-//struct NoteNamesView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        NoteNamesView()
-//    }
-//}

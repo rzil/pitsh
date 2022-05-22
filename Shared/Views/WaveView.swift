@@ -11,7 +11,10 @@ private let gridColor1 = Color(red: 0.8, green: 0.8, blue: 1, opacity: 1)
 private let gridColor2 = Color(red: 0.9, green: 0.9, blue: 1, opacity: 1)
 
 struct WaveView: View {
-  let document: PitshDocument
+  let documents: FetchedResults<PitshDocument>
+  private var document: PitshDocument {
+    documents.first!
+  }
 
   var body: some View {
     GeometryReader { geometry in
@@ -86,9 +89,3 @@ private func strokes(width: CGFloat, height: CGFloat, document: PitshDocument) -
   }
   return strokes
 }
-
-//struct WaveView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        WaveView()
-//    }
-//}

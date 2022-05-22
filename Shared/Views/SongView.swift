@@ -171,7 +171,7 @@ struct SongView: View {
           if document.pitches != nil {
             ScrollView(.horizontal) {
               ZStack {
-                WaveView(document: document)
+                WaveView(documents: documents)
                 NotesView()
                 GeometryReader { geometry in
                   let width = geometry.size.width
@@ -187,7 +187,7 @@ struct SongView: View {
               .frame(width: scrollWidth)
             }
             HStack {
-              NoteNamesView(document: document)
+              NoteNamesView(documents: documents)
                 .frame(width: 32)
                 .clipped()
               Spacer()

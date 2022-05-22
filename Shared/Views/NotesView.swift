@@ -19,7 +19,6 @@ struct NotesView: View {
 
   var body: some View {
     GeometryReader { geometry in
-      let height = ecc(geometry.size.height)
       ForEach(events) { event in
         if let frame = frameForEvent(event, geometry: geometry) {
           NoteView(event: event)
@@ -32,7 +31,7 @@ struct NotesView: View {
                   draggedEvent = nil
                   if let shift = event.relatedDocument?.convertVerticalShiftToPitch(
                     from: value.translation.height,
-                    containerHeight: height
+                    containerHeight: geometry.size.height
                   ) {
                     event.pitchShift += shift
                     event.relatedDocument?.needsPitchShift = true
@@ -77,8 +76,8 @@ private func frameForEvent(_ event: PitshEvent, geometry: GeometryProxy) -> CGRe
         let pitchesCount = document.pitches?.count,
         pitchesCount > 0
   else { return nil }
-  let width = ecc(geometry.size.width)
-  let height = ecc(geometry.size.height)
+  let width = geometry.size.width
+  let height = geometry.size.height
   let (smallest, biggest) = document.visiblePitchRange
   let range = biggest - smallest
   let noteHeight = height / CGFloat(range)

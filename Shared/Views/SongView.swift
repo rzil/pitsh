@@ -174,7 +174,7 @@ struct SongView: View {
                 WaveView(document: document)
                 NotesView()
                 GeometryReader { geometry in
-                  let width = ecc(geometry.size.width)
+                  let width = geometry.size.width
                   Rectangle()
                     .foregroundColor(.gray)
                     .frame(width: 1)

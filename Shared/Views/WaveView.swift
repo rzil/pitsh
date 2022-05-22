@@ -15,10 +15,8 @@ struct WaveView: View {
 
   var body: some View {
     GeometryReader { geometry in
-      let width = ecc(geometry.size.width)
-      let height = ecc(geometry.size.height)
       // draw grid
-      let rects = grid(width: width, height: height, document: document)
+      let rects = grid(width: geometry.size.width, height: geometry.size.height, document: document)
       ForEach(rects) { r in
         Rectangle()
           .fill(gridColor2)
@@ -27,7 +25,7 @@ struct WaveView: View {
       }
       
       // draw audio
-      let paths = strokes(width: width, height: height, document: document)
+      let paths = strokes(width: geometry.size.width, height: geometry.size.height, document: document)
       ForEach(paths) { strokePath in
         strokePath.path
           .stroke(Color.red, lineWidth: 1.5)
